@@ -1,5 +1,5 @@
 const express = require('express');
-const Hotels = require('../model/Hotels'); // Updated import
+const Hotels = require('../model/Hotels'); 
 const Users = require('../model/Users');
 
 const jwt = require('jsonwebtoken');
@@ -36,6 +36,21 @@ router.post('/create', verifyToken, async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+router.get('/top-rated', async (req, res) => {
+  try {
+      const topRatedHotels = await Hotels.find().sort({ rating: -1 }).limit(50);
+
+      if (!topRatedHotels || topRatedHotels.length === 0) {
+          return res.status(404).json({ message: 'No top-rated hotels found' });
+      }
+
+      res.json(topRatedHotels);
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Internal Server Error' });
   }
 });
 
