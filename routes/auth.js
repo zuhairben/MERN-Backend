@@ -12,7 +12,8 @@ CLIENT_ID=process.env.OAuth;
 router.post('/signup', async (req, res) => {
     try {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // copied from stack overflow
-        const { email, password } = req.body;
+        const { email, password, firstname, lastname } = req.body;
+        const role ='User'
 
         let user = await Users.findOne({ email });
         if (user) return res.json({ msg: 'User exists' });
@@ -20,7 +21,7 @@ router.post('/signup', async (req, res) => {
         if (!emailRegex.test(email)) return res.json({ msg: 'Invalid email format' });
         if (password.length < 8) return res.json({ msg: 'Password too small' });
 
-        await Users.create({ email, password: await bcrypt.hash(password, 5) });
+        await Users.create({ email, password: await bcrypt.hash(password, 5), role, firstname, lastname, });
 
         return res.json({ msg: 'User Created' });
     } catch (error) {
@@ -32,19 +33,28 @@ router.post('/signup', async (req, res) => {
 router.post('/login', async (req, res) => {
     try {
         const { email, password } = req.body;
-
+        
         const user = await Users.findOne({ email });
         if (!user) return res.json({ msg: "User doesn't exist" });
 
         const passwordCheck = await bcrypt.compare(password, user.password);
         if (!passwordCheck) return res.json({ msg: "Invalid password" });
 
-        const token = jwt.sign({
+        const tokenPayload = {
             email,
-        }, "Secret123", { expiresIn: "1d" });
+            role: user.role,
+            firstname: user.firstname,
+            lastname: user.lastname
+        };
+
+        const token = jwt.sign(tokenPayload, "Secret123", { expiresIn: "1d" });
 
         res.json({
-            msg: "Logged in", token
+            msg: "Logged in", 
+            token,
+            role: user.role,
+            firstname: user.firstname,
+            lastname: user.lastname
         });
 
     } catch (error) {
@@ -57,16 +67,30 @@ router.post('/google-login', async (req, res) => {
     try {
         const { tokenId } = req.body;
         const response = await client.verifyIdToken({ idToken: tokenId, audience: CLIENT_ID });
-        const { email_verified, email } = response.payload;
+        const { email_verified, email, given_name, family_name } = response.payload;
 
         if (email_verified) {
             const user = await Users.findOne({ email });
             if (user) {
-                const token = jwt.sign({ email }, "Secret123", { expiresIn: "1d" });
+                const tokenPayload = {
+                    email,
+                    role: user.role,
+                    firstname: given_name || '', // Use given_name from Google Auth, or an empty string if not provided
+                    lastname: family_name || '' // Use family_name from Google Auth, or an empty string if not provided
+                };
+
+                const token = jwt.sign(tokenPayload, "Secret123", { expiresIn: "1d" });
                 return res.json({ msg: "Logged in", token });
             } else {
                 await Users.create({ email });
-                const token = jwt.sign({ email }, "Secret123", { expiresIn: "1d" });
+                const tokenPayload = {
+                    email,
+                    role: 'User', // Default role for new users
+                    firstname: given_name || '', // Use given_name from Google Auth, or an empty string if not provided
+                    lastname: family_name || '' // Use family_name from Google Auth, or an empty string if not provided
+                };
+
+                const token = jwt.sign(tokenPayload, "Secret123", { expiresIn: "1d" });
                 return res.json({ msg: "User registered and logged in", token });
             }
         } else {
@@ -78,21 +102,36 @@ router.post('/google-login', async (req, res) => {
     }
 });
 
+
 router.post('/facebook-login', async (req, res) => {
     try {
         const { accessToken, userID } = req.body;
-        const response = await axios.get(`https://graph.facebook.com/v13.0/${userID}?fields=id,email&access_token=${accessToken}`);
+        const response = await axios.get(`https://graph.facebook.com/v13.0/${userID}?fields=id,email,first_name,last_name&access_token=${accessToken}`);
 
-        const { id, email } = response.data;
+        const { id, email, first_name, last_name } = response.data;
 
         if (id) {
             const user = await Users.findOne({ email });
             if (user) {
-                const token = jwt.sign({ email }, "Secret123", { expiresIn: "1d" });
+                const tokenPayload = {
+                    email,
+                    role: user.role,
+                    firstname: first_name || '', // Use first_name from Facebook Auth, or an empty string if not provided
+                    lastname: last_name || '' // Use last_name from Facebook Auth, or an empty string if not provided
+                };
+
+                const token = jwt.sign(tokenPayload, "Secret123", { expiresIn: "1d" });
                 return res.json({ msg: "Logged in", token });
             } else {
                 await Users.create({ email });
-                const token = jwt.sign({ email }, "Secret123", { expiresIn: "1d" });
+                const tokenPayload = {
+                    email,
+                    role: 'User', // Default role for new users
+                    firstname: first_name || '', // Use first_name from Facebook Auth, or an empty string if not provided
+                    lastname: last_name || '' // Use last_name from Facebook Auth, or an empty string if not provided
+                };
+
+                const token = jwt.sign(tokenPayload, "Secret123", { expiresIn: "1d" });
                 return res.json({ msg: "User registered and logged in", token });
             }
         } else {
@@ -103,5 +142,6 @@ router.post('/facebook-login', async (req, res) => {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
+
 
 module.exports = router;
