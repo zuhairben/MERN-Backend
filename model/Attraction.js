@@ -13,9 +13,16 @@ const AttractionSchema = new mongoose.Schema({
     position: Number,
     features: [String],
     timeOpen: [Date],
-    priceRange: [number],
+    priceRange: [Number],
     rating: Number,
-    numberOfReviews: Number
+    numberOfReviews: Number,
+    owner: {
+        email: String,
+        password: String,
+        role: String,
+        firstname: String,
+        lastname: String,
+    }
 });
 
 const Attraction = mongoose.model('Attraction', AttractionSchema);

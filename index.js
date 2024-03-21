@@ -1,7 +1,10 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const authRouter = require('./routes/auth');
-const hotelsRouter = require('./routes/hotel'); 
+const hotelRouter = require('./routes/hotels');
+const airportRouter = require('./routes/airports');
+const attractionRouter = require('./routes/attractions'); 
+const flightRouter = require('./routes/flights'); 
 require("dotenv").config();
 
 const app = express();
@@ -24,7 +27,10 @@ async function connectToDatabase() {
 connectToDatabase();
 
 app.use('/auth', authRouter);
-app.use('/hotels', hotelsRouter);
+app.use('/hotels', hotelRouter);
+app.use('/airports', airportRouter);
+app.use('/attractions', attractionRouter);
+app.use('/flights', flightRouter);
 
 
 app.use((err, req, res, next) => {
