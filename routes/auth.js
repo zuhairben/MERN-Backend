@@ -1,7 +1,7 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const Users = require('../model/Users');
+const Users = require('../model/User');
 const router = express.Router();
 const { OAuth2Client } = require('google-auth-library');
 const client = new OAuth2Client(process.env.OAuth); 
@@ -12,14 +12,16 @@ CLIENT_ID=process.env.OAuth;
 router.post('/signup', async (req, res) => {
     try {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // copied from stack overflow
-        const { email, password, firstname, lastname } = req.body;
-        const role ='User'
+        const { email, password, firstname, lastname, role } = req.body;
+
+
 
         let user = await Users.findOne({ email });
         if (user) return res.json({ msg: 'User exists' });
         if (email.length < 3) return res.json({ msg: 'Email too small' });
         if (!emailRegex.test(email)) return res.json({ msg: 'Invalid email format' });
         if (password.length < 8) return res.json({ msg: 'Password too small' });
+        if (role != "owner" && role != "user") return res.json({msg: "Invalid user role"});
 
         await Users.create({ email, password: await bcrypt.hash(password, 5), role, firstname, lastname, });
 
@@ -41,7 +43,7 @@ router.post('/login', async (req, res) => {
         if (!passwordCheck) return res.json({ msg: "Invalid password" });
 
         const tokenPayload = {
-            email,
+            email,    
             role: user.role,
             firstname: user.firstname,
             lastname: user.lastname

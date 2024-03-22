@@ -1,6 +1,6 @@
 const express = require('express');
-const Hotels = require('../model/Hotels'); 
-const Users = require('../model/Users');
+const Hotels = require('../model/Hotel'); 
+const Users = require('../model/User');
 
 const jwt = require('jsonwebtoken');
 const router = express.Router();
@@ -28,8 +28,12 @@ router.use(express.json());
 router.post('/create', verifyToken, async (req, res) => {
   try {
     const { hotel_name, continent, country_name, city_name, no_rooms, rating, price, review_count, facilities, days_available } = req.body;
-    const author = await Users.findOne({ email: req.user.email });
-    const newHotel = new Hotels({ hotel_name, continent, country_name, city_name, no_rooms, rating, price, review_count, facilities, days_available, author });
+    const user = await Users.findOne({ email: req.user.email });
+
+    if (user.role != "owner")
+    return res.status(401).json({ message: 'Unauthorized Action' });
+ 
+    const newHotel = new Hotels({ hotel_name, continent, country_name, city_name, no_rooms, rating, price, review_count, facilities, days_available, user });
     const savedHotel = await newHotel.save();
     res.json(savedHotel);
     
@@ -64,7 +68,7 @@ router.get('/filter', async (req, res) => {
       country_name,
       city_name,
       no_rooms_min,
-      no_rooms_max,
+      no_rooms_max, 
       rating_min,
       rating_max,
       price_min,
@@ -88,7 +92,6 @@ router.get('/filter', async (req, res) => {
       days_available
     );
 
-    console.log("recieved hotels")
 
     res.json(filteredHotels);
   } catch (error) {
@@ -98,11 +101,6 @@ router.get('/filter', async (req, res) => {
   }
 });
 
-
-const { MongoClient } = require('mongodb');
-
-// Replace with your actual MongoDB connection URI
-const uri = 'mongodb://your_connection_uri';
 
 async function filterHotels(
   continent,
@@ -171,18 +169,34 @@ async function filterHotels(
       filter.days_available = { $in: availableDates };
     }
 
+    console.log(filter)
+
     // Find hotels matching the filter criteria
-    const filteredHotels = Hotels.find(filter).limit(10);
+    const filteredHotels = Hotels.find(filter);
 
 
 
     return filteredHotels
   } catch (error) {
-    console.error(error);
-    console.log("error in function")
-    throw error; // Re-throw to be caught in the API endpoint
+      console.log("error in function")
+      throw error; // Re-throw to be caught in the API endpoint
   }
 }
+
+router.post("/delete", verifyToken, async (req, res) => {
+  try{
+    const {hotel_name, city_name} = req.body;
+    const user = await Users.findOne({"email": req.user.email});
+    const hotel = await Hotel.findOne({"hotel_name": hotel_name, "city_name": city_name});
+    if (hotel.owner.email != user.email) 
+      return res.status(401).json({msg:"Unauthorized Access"});
+    await Hotel.deleteOne({"hotel_name": hotel_name, "city_name": city_name});
+  }
+  catch (error){
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
 
 
 module.exports = router;
