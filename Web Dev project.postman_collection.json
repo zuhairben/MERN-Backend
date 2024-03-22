@@ -44,7 +44,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"email\": \"def@xyz.com\",\n    \"password\": \"12345678\",\n    \"firstname\": \"John\",\n    \"lastname\": \"Doe\",\n    \"role\": \"user\" \n}",
+							"raw": "{\n    \"email\": \"pqr@xyz.com\",\n    \"password\": \"12345678\",\n    \"firstname\": \"John\",\n    \"lastname\": \"Doe\",\n    \"role\": \"owner\" \n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -100,7 +100,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"email\": \"def@xyz.com\",\n    \"password\": \"12345678\"\n}",
+							"raw": "{\n    \"email\": \"pqr@xyz.com\",\n    \"password\": \"12345678\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -145,7 +145,85 @@
 								{
 									"key": "continent_name",
 									"value": "Asia"
+								},
+								{
+									"key": "rating_min",
+									"value": "3",
+									"disabled": true
+								},
+								{
+									"key": "rating_max",
+									"value": "4",
+									"disabled": true
+								},
+								{
+									"key": "city_name",
+									"value": "ShanghaiÂ Â ",
+									"disabled": true
+								},
+								{
+									"key": "price_max",
+									"value": "100",
+									"disabled": true
 								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Hotel",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InBxckB4eXouY29tIiwicm9sZSI6Im93bmVyIiwiZmlyc3RuYW1lIjoiSm9obiIsImxhc3RuYW1lIjoiRG9lIiwiaWF0IjoxNzExMDUzNDc5LCJleHAiOjE3MTExMzk4Nzl9.Pq0VUxyzir5EJRVsPaISBwSR6_zWpRPA8ZaMAHSAbOs",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"hotel_name\": \"continental\",\n    \"continent\": \"asia\",\n    \"country_name\": \"pakistan\",\n    \"city_name\": \"hyderabad\",\n    \"no_rooms\": \"200\",\n    \"rating\": \"4\",\n    \"price\": \"2000\",\n    \"review_count\": \"300\",\n    \"facilities\": \"wifi, parking\",\n    \"days_available\": \"Monday, Sunday\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/hotels/create",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"hotels",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get Top rated",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/hotels/get/toprated",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"hotels",
+								"get",
+								"toprated"
 							]
 						}
 					},
@@ -225,7 +303,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"plane_id\": \"p123\",\r\n    \"departure_airport\": \"JFK\",\r\n    \"arrival_airport\": \"FR\",\r\n    \"departure_time\": \"2024-09-18T06:00:00\",\r\n    \"arrival_time\": \"2024-09-18T08:00:00\",\r\n    \"seats_total\": 20,\r\n    \"ticket_price\": 5000\r\n\r\n    }",
+							"raw": "{\r\n    \"plane_id\": \"p1233\",\r\n    \"departure_airport\": \"JFK\",\r\n    \"arrival_airport\": \"FR\",\r\n    \"departure_time\": \"2024-09-18T06:00:00\",\r\n    \"arrival_time\": \"2024-09-18T08:00:00\",\r\n    \"seats_total\": 20,\r\n    \"ticket_price\": 5000\r\n\r\n    }",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -256,7 +334,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"flight_id\": \"p1232024-09-18T06:00:00\"\r\n}",
+							"raw": "{\r\n    \"flight_id\": \"p12332024-09-18T06:00:00\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -295,7 +373,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"flight_id\": \"p12342024-09-18T06:00:00\"\r\n}",
+							"raw": "{\r\n    \"flight_id\": \"p12332024-09-18T06:00:00\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -352,8 +430,38 @@
 				{
 					"name": "Book Flight",
 					"request": {
-						"method": "GET",
-						"header": []
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InBxckB4eXouY29tIiwicm9sZSI6Im93bmVyIiwiZmlyc3RuYW1lIjoiSm9obiIsImxhc3RuYW1lIjoiRG9lIiwiaWF0IjoxNzExMDUzNDc5LCJleHAiOjE3MTExMzk4Nzl9.Pq0VUxyzir5EJRVsPaISBwSR6_zWpRPA8ZaMAHSAbOs",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"flight_id\": \"p12332024-09-18T06:00:00\",\n    \"passport_id\": \"1234456789\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/flights/booking",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"flights",
+								"booking"
+							]
+						}
 					},
 					"response": []
 				}
@@ -361,7 +469,117 @@
 		},
 		{
 			"name": "Airport",
-			"item": []
+			"item": [
+				{
+					"name": "Create Airport",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InBxckB4eXouY29tIiwicm9sZSI6Im93bmVyIiwiZmlyc3RuYW1lIjoiSm9obiIsImxhc3RuYW1lIjoiRG9lIiwiaWF0IjoxNzExMDUzNDc5LCJleHAiOjE3MTExMzk4Nzl9.Pq0VUxyzir5EJRVsPaISBwSR6_zWpRPA8ZaMAHSAbOs",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": \"JFK\",\n    \"country\": \"america\",\n    \"city\": \"new york\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/airports/create",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"airports",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get by id",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\":\"JFK\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/airports/get/id",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"airports",
+								"get",
+								"id"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Airport",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InBxckB4eXouY29tIiwicm9sZSI6Im93bmVyIiwiZmlyc3RuYW1lIjoiSm9obiIsImxhc3RuYW1lIjoiRG9lIiwiaWF0IjoxNzExMDUzNDc5LCJleHAiOjE3MTExMzk4Nzl9.Pq0VUxyzir5EJRVsPaISBwSR6_zWpRPA8ZaMAHSAbOs",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": \"JFK\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/airports/delete/id",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"airports",
+								"delete",
+								"id"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	]
 }

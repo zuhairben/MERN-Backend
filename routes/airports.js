@@ -45,10 +45,10 @@ router.post('/create', verifyToken, async (req, res) => {
   }
 });
 
-router.get('/getByID', async (req, res) => {
+router.get('/get/id', async (req, res) => {
   try {
     const { id } = req.body
-    const airport = Airports.findOne({ "id": id });
+    const airport = await Airports.findOne({ "id": id });
     res.json(airport);
   }
   catch (error) {
@@ -57,14 +57,17 @@ router.get('/getByID', async (req, res) => {
   }
 });
 
-router.post("/deleteByID", verifyToken, async (req, res) => {
+router.post("/delete/id", verifyToken, async (req, res) => {
   try {
     const { id } = req.body;
     const user = await Users.findOne({ "email": req.user.email });
     const airport = await Airports.findOne({ "id": id });
-    if (airport.owner.email != user.email)
+    console.log(airport.owner);
+    console.log(req.user.email);
+    if (!(airport.owner === req.user.email))
       return res.status(401).json({ msg: "Unauthorized Access" });
     await Airports.deleteOne({ "id": id });
+    return res.status(200).json({"msg": "Deleted"})
   }
   catch (error) {
     console.error(error);
