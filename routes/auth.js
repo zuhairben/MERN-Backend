@@ -4,10 +4,10 @@ const jwt = require('jsonwebtoken');
 const Users = require('../model/User');
 const router = express.Router();
 const { OAuth2Client } = require('google-auth-library');
-const client = new OAuth2Client(process.env.OAuth); 
+const client = new OAuth2Client(process.env.OAuth);
 const axios = require('axios');
 require("dotenv").config();
-CLIENT_ID=process.env.OAuth;
+CLIENT_ID = process.env.OAuth;
 
 router.post('/signup', async (req, res) => {
     try {
@@ -21,7 +21,7 @@ router.post('/signup', async (req, res) => {
         if (email.length < 3) return res.json({ msg: 'Email too small' });
         if (!emailRegex.test(email)) return res.json({ msg: 'Invalid email format' });
         if (password.length < 8) return res.json({ msg: 'Password too small' });
-        if (role != "owner" && role != "user") return res.json({msg: "Invalid user role"});
+        if (role != "owner" && role != "user") return res.json({ msg: "Invalid user role" });
 
         await Users.create({ email, password: await bcrypt.hash(password, 5), role, firstname, lastname, });
 
@@ -35,15 +35,15 @@ router.post('/signup', async (req, res) => {
 router.post('/login', async (req, res) => {
     try {
         const { email, password } = req.body;
-        
+
         const user = await Users.findOne({ email });
         if (!user) return res.json({ msg: "User doesn't exist" });
 
         const passwordCheck = await bcrypt.compare(password, user.password);
         if (!passwordCheck) return res.json({ msg: "Invalid password" });
-
+        console.log("user role = ", user.role);
         const tokenPayload = {
-            email,    
+            email,
             role: user.role,
             firstname: user.firstname,
             lastname: user.lastname
@@ -52,7 +52,7 @@ router.post('/login', async (req, res) => {
         const token = jwt.sign(tokenPayload, "Secret123", { expiresIn: "1d" });
 
         res.json({
-            msg: "Logged in", 
+            msg: "Logged in",
             token,
             role: user.role,
             firstname: user.firstname,

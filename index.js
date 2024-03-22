@@ -3,8 +3,8 @@ const mongoose = require('mongoose');
 const authRouter = require('./routes/auth');
 const hotelRouter = require('./routes/hotels');
 const airportRouter = require('./routes/airports');
-const attractionRouter = require('./routes/attractions'); 
-const flightRouter = require('./routes/flights'); 
+const attractionRouter = require('./routes/attractions');
+const flightRouter = require('./routes/flights');
 require("dotenv").config();
 
 const app = express();

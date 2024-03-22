@@ -11,9 +11,9 @@ const AttractionSchema = new mongoose.Schema({
     address: String,
     website: String,
     position: Number,
-    features: [String],
-    timeOpen: [Date],
-    priceRange: [Number],
+    features: String,
+    timeOpen: String,
+    priceRange: Number,
     rating: Number,
     numberOfReviews: Number,
     owner: {
