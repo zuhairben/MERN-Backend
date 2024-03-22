@@ -11,7 +11,8 @@ const HotelSchema = new mongoose.Schema({
     review_count: Number,
     facilities: String,
     days_available: [Date],
-    owner: String
+    owner: String,
+    is_deleted: Boolean
 
 });
 

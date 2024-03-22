@@ -16,7 +16,9 @@ const AttractionSchema = new mongoose.Schema({
     priceRange: Number,
     rating: Number,
     numberOfReviews: Number,
-    owner: String
+    owner: String,
+    is_deleted: Boolean
+
 });
 
 const Attraction = mongoose.model('Attraction', AttractionSchema);

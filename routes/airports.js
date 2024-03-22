@@ -66,7 +66,7 @@ router.post("/delete/id", verifyToken, async (req, res) => {
     console.log(req.user.email);
     if (!(airport.owner === req.user.email))
       return res.status(401).json({ msg: "Unauthorized Access" });
-    await Airports.deleteOne({ "id": id });
+    await Airports.updateOne({ "id": id },{"is_deleted": true});
     return res.status(200).json({"msg": "Deleted"})
   }
   catch (error) {

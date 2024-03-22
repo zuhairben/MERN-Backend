@@ -39,5 +39,18 @@ router.post('/ch_pwd', verifyToken, async (req, res) => {
     }
 });
 
+router.post('/del_acc', verifyToken, async (req, res) => {
+    try {
+        const { email } = req.body;
+        const user = await Users.findOne({ email: req.user.email });
+        if (!user) return res.json({ msg: "User doesn't exist" });
+        await Users.updateOne({ email: req.user.email }, { is_deleted: true });
+        return res.json({ msg: 'User Deleted' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
 module.exports = router;
 

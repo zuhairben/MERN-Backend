@@ -6,6 +6,8 @@ const UserSchema = new mongoose.Schema({
     role: String,
     firstname: String,
     lastname: String,
+    status: String,
+    is_deleted: Boolean
 });
 
 const Users = mongoose.model('Users', UserSchema);

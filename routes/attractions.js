@@ -196,7 +196,7 @@ router.post("/delete", verifyToken, async (req, res) => {
     const attraction = await Attractions.findOne({ "name": name, "city": city });
     if (attraction.owner.email != user.email)
       return res.status(401).json({ msg: "Unauthorized Access" });
-    await Attractions.deleteOne({ "name": name, "city": city });
+    await Attractions.updateOne({ "name": name, "city": city }),{is_deleted: true};
   }
   catch (error) {
     console.error(error);

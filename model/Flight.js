@@ -11,7 +11,9 @@ const FlightSchema = new mongoose.Schema({
     seats_booked: Number,
     ticket_price: Number,
     owner: String,
-    bookings: [{ passport_id: String }]
+    bookings: [{ passport_id: String }],
+    is_deleted: Boolean
+
 });
 
 
