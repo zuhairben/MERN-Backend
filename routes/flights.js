@@ -120,10 +120,10 @@ router.post("/delete/id", verifyToken, async (req, res) => {
 
     const flight = await Flights.findOne({ "flight_id": flight_id });
 
-    if (flight.owner != req.user.email) return res.status(401).json({ "error": "Unauthorized Action" });
+    if (!(flight.owner === req.user.email)) return res.status(401).json({ "error": "Unauthorized Action" });
 
     await Flights.deleteOne({ "flight_id": flight_id });
-
+    return res.status(200).json({"msg": "Deleted"})
   }
   catch (error) {
     console.error(error);

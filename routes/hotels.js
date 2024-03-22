@@ -30,6 +30,9 @@ router.post('/create', verifyToken, async (req, res) => {
     const { hotel_name, continent, country_name, city_name, no_rooms, rating, price, review_count, facilities, days_available } = req.body;
     const user = await Users.findOne({ email: req.user.email });
 
+    const hotel = await Hotels.findOne({"hotel_name": hotel_name, "city_name": city_name});
+    if(hotel) return res.json({"msg": "Hotel already exists"});
+
     if (user.role != "owner")
       return res.status(401).json({ message: 'Unauthorized Action' });
 
@@ -45,7 +48,7 @@ router.post('/create', verifyToken, async (req, res) => {
   }
 });
 
-router.get('/top-rated', async (req, res) => {
+router.get('/get/toprated', async (req, res) => {
   try {
     const topRatedHotels = await Hotels.find().sort({ rating: -1 }).limit(50);
 
@@ -59,6 +62,7 @@ router.get('/top-rated', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
 
 //Get Hotels by filters
 
@@ -185,7 +189,7 @@ async function filterHotels(
   }
 }
 
-router.post("/delete", verifyToken, async (req, res) => {
+router.post("/delete/namecity", verifyToken, async (req, res) => {
   try {
     const { hotel_name, city_name } = req.body;
     const user = await Users.findOne({ "email": req.user.email });
