@@ -4,13 +4,7 @@ const AirportSchema = new mongoose.Schema({
     id: String,
     country: String,
     city: String,
-    owner: {
-        email: String,
-        password: String,
-        role: String,
-        firstname: String,
-        lastname: String,
-    }
+    owner: String
 });
 
 const Airports = mongoose.model('Airport', AirportSchema);

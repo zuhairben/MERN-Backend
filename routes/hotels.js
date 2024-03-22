@@ -1,5 +1,5 @@
 const express = require('express');
-const Hotels = require('../model/Hotel'); 
+const Hotels = require('../model/Hotel');
 const Users = require('../model/User');
 
 const jwt = require('jsonwebtoken');
@@ -31,12 +31,14 @@ router.post('/create', verifyToken, async (req, res) => {
     const user = await Users.findOne({ email: req.user.email });
 
     if (user.role != "owner")
-    return res.status(401).json({ message: 'Unauthorized Action' });
- 
-    const newHotel = new Hotels({ hotel_name, continent, country_name, city_name, no_rooms, rating, price, review_count, facilities, days_available, user });
+      return res.status(401).json({ message: 'Unauthorized Action' });
+
+    const owner = req.user.email;
+
+    const newHotel = new Hotels({ hotel_name, continent, country_name, city_name, no_rooms, rating, price, review_count, facilities, days_available, owner });
     const savedHotel = await newHotel.save();
     res.json(savedHotel);
-    
+
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: 'Internal Server Error' });
@@ -45,16 +47,16 @@ router.post('/create', verifyToken, async (req, res) => {
 
 router.get('/top-rated', async (req, res) => {
   try {
-      const topRatedHotels = await Hotels.find().sort({ rating: -1 }).limit(50);
+    const topRatedHotels = await Hotels.find().sort({ rating: -1 }).limit(50);
 
-      if (!topRatedHotels || topRatedHotels.length === 0) {
-          return res.status(404).json({ message: 'No top-rated hotels found' });
-      }
+    if (!topRatedHotels || topRatedHotels.length === 0) {
+      return res.status(404).json({ message: 'No top-rated hotels found' });
+    }
 
-      res.json(topRatedHotels);
+    res.json(topRatedHotels);
   } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Internal Server Error' });
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 });
 
@@ -68,7 +70,7 @@ router.get('/filter', async (req, res) => {
       country_name,
       city_name,
       no_rooms_min,
-      no_rooms_max, 
+      no_rooms_max,
       rating_min,
       rating_max,
       price_min,
@@ -178,21 +180,21 @@ async function filterHotels(
 
     return filteredHotels
   } catch (error) {
-      console.log("error in function")
-      throw error; // Re-throw to be caught in the API endpoint
+    console.log("error in function")
+    throw error; // Re-throw to be caught in the API endpoint
   }
 }
 
 router.post("/delete", verifyToken, async (req, res) => {
-  try{
-    const {hotel_name, city_name} = req.body;
-    const user = await Users.findOne({"email": req.user.email});
-    const hotel = await Hotel.findOne({"hotel_name": hotel_name, "city_name": city_name});
-    if (hotel.owner.email != user.email) 
-      return res.status(401).json({msg:"Unauthorized Access"});
-    await Hotel.deleteOne({"hotel_name": hotel_name, "city_name": city_name});
+  try {
+    const { hotel_name, city_name } = req.body;
+    const user = await Users.findOne({ "email": req.user.email });
+    const hotel = await Hotel.findOne({ "hotel_name": hotel_name, "city_name": city_name });
+    if (hotel.owner.email != user.email)
+      return res.status(401).json({ msg: "Unauthorized Access" });
+    await Hotel.deleteOne({ "hotel_name": hotel_name, "city_name": city_name });
   }
-  catch (error){
+  catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
   }

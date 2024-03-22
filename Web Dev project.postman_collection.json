@@ -1,0 +1,367 @@
+{
+	"info": {
+		"_postman_id": "095cd4b5-cfcd-48fb-8a75-9eae71f2c9a1",
+		"name": "Web Dev project",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "31406343"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "New User",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"def@xyz.com\",\n    \"password\": \"12345678\",\n    \"firstname\": \"John\",\n    \"lastname\": \"Doe\",\n    \"role\": \"user\" \n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/auth/signup",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"auth",
+								"signup"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New Owner",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"def@xyz.com\",\n    \"password\": \"12345678\",\n    \"firstname\": \"John\",\n    \"lastname\": \"Doe\",\n    \"role\": \"user\" \n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/auth/signup",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"auth",
+								"signup"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login User",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"def@xyz.com\",\n    \"password\": \"12345678\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/auth/login",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login Owner",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"def@xyz.com\",\n    \"password\": \"12345678\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/auth/login",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Hotels",
+			"item": [
+				{
+					"name": "Filter Hotels",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/hotels/filter?continent_name=Asia",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"hotels",
+								"filter"
+							],
+							"query": [
+								{
+									"key": "continent_name",
+									"value": "Asia"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Attractions",
+			"item": [
+				{
+					"name": "Create Attraction",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImRlZkB4eXouY29tIiwicm9sZSI6InVzZXIiLCJmaXJzdG5hbWUiOiJKb2huIiwibGFzdG5hbWUiOiJEb2UiLCJpYXQiOjE3MTEwNzcxOTAsImV4cCI6MTcxMTE2MzU5MH0.e1Ubi_msqjVKuMd8PpSW5FUYLa9sQhYLqkrFkcRfPTw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"funland\",\r\n    \"city\": \"Hyderabad\",\r\n    \"state\": \"Sindh\",\r\n    \"type\": \"amusement park\",\r\n    \"country\": \"Pakistan\",\r\n    \"description\": \"fun rides\",\r\n    \"phone\": \"12345678\",\r\n    \"address\": \"somewhere there\",\r\n    \"website\": \"abc.com\",\r\n    \"position\": \"something\",\r\n    \"features\": \"rides, wifi\",\r\n    \"timeOpen\": \"6am\",\r\n    \"priceRange\": \"100, 5000\",\r\n    \"rating\": \"3.5\",\r\n    \"numberOfReviews\": 50\r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3300/routes/attractions/create",
+							"host": [
+								"localhost"
+							],
+							"port": "3300",
+							"path": [
+								"routes",
+								"attractions",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Filter Attraction",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Flights",
+			"item": [
+				{
+					"name": "Create Flight",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InBxckB4eXouY29tIiwicm9sZSI6Im93bmVyIiwiZmlyc3RuYW1lIjoiSm9obiIsImxhc3RuYW1lIjoiRG9lIiwiaWF0IjoxNzExMDc3Mzg0LCJleHAiOjE3MTExNjM3ODR9.Qb9KBEyBn5b8Kv6xjK-Wn1WxylMCDCGYrNvXRF4Y-tQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"plane_id\": \"p123\",\r\n    \"departure_airport\": \"JFK\",\r\n    \"arrival_airport\": \"FR\",\r\n    \"departure_time\": \"2024-09-18T06:00:00\",\r\n    \"arrival_time\": \"2024-09-18T08:00:00\",\r\n    \"seats_total\": 20,\r\n    \"ticket_price\": 5000\r\n\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/flights/create",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"flights",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get by ID",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"flight_id\": \"p1232024-09-18T06:00:00\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/flights/search/id",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"flights",
+								"search",
+								"id"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete by ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InBxckB4eXouY29tIiwicm9sZSI6Im93bmVyIiwiZmlyc3RuYW1lIjoiSm9obiIsImxhc3RuYW1lIjoiRG9lIiwiaWF0IjoxNzExMDc3Mzg0LCJleHAiOjE3MTExNjM3ODR9.Qb9KBEyBn5b8Kv6xjK-Wn1WxylMCDCGYrNvXRF4Y-tQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"flight_id\": \"p12342024-09-18T06:00:00\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/flights/delete/id",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"flights",
+								"delete",
+								"id"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get by Route",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"arrival_airport\": \"FR\",\r\n    \"departure_airport\": \"JFK\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/flights/search/route",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"flights",
+								"search",
+								"route"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Book Flight",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Airport",
+			"item": []
+		}
+	]
+}

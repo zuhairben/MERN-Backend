@@ -1,5 +1,5 @@
 const express = require('express');
-const Attractions = require('../model/Attraction'); 
+const Attractions = require('../model/Attraction');
 const Users = require('../model/User');
 
 const jwt = require('jsonwebtoken');
@@ -29,30 +29,32 @@ router.use(express.json());
 router.post('/create', verifyToken, async (req, res) => {
   try {
     const { name,
-            city,
-            state, 
-            type, 
-            country, 
-            description, 
-            phone, 
-            address, 
-            website, 
-            position, 
-            featres, 
-            timeOpen, 
-            priceRange, 
-            rating, 
-            numberOfReviews 
-        } = req.body;
+      city,
+      state,
+      type,
+      country,
+      description,
+      phone,
+      address,
+      website,
+      position,
+      featres,
+      timeOpen,
+      priceRange,
+      rating,
+      numberOfReviews
+    } = req.body;
     const user = await Users.findOne({ email: req.user.email });
-
+    console.log(user.role);
     if (user.role != "owner")
-    return res.status(401).json({ message: 'Unauthorized Action' });
+      return res.status(401).json({ message: 'Unauthorized Action' });
 
-    const newAttraction = new Attractions({ name, city, state, type, country, description, phone, address, website, position, featres, timeOpen, priceRange, rating, numberOfReviews, user });
+    const owner = user.email;
+
+    const newAttraction = new Attractions({ name, city, state, type, country, description, phone, address, website, position, featres, timeOpen, priceRange, rating, numberOfReviews, owner });
     const savedAttraction = await newAttraction.save();
     res.json(savedAttraction);
-    
+
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: 'Internal Server Error' });
@@ -61,16 +63,16 @@ router.post('/create', verifyToken, async (req, res) => {
 
 router.get('/top-rated', async (req, res) => {
   try {
-      const topRatedAttractions = await Attractions.find().sort({ rating: -1 }).limit(50);
+    const topRatedAttractions = await Attractions.find().sort({ rating: -1 }).limit(50);
 
-      if (!topRatedAttractions || topRatedAttractions.length === 0) {
-          return res.status(404).json({ message: 'No top-rated Attractions found' });
-      }
+    if (!topRatedAttractions || topRatedAttractions.length === 0) {
+      return res.status(404).json({ message: 'No top-rated Attractions found' });
+    }
 
-      res.json(topRatedAttractions);
+    res.json(topRatedAttractions);
   } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Internal Server Error' });
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 });
 
@@ -80,8 +82,8 @@ router.get('/filter', async (req, res) => {
     // Get query parameters
     const {
       continent,
-      country_name,
-      city_name,
+      country,
+      city,
       no_rooms_min,
       no_rooms_max,
       rating_min,
@@ -95,8 +97,8 @@ router.get('/filter', async (req, res) => {
     // Apply filtering logic to your attraction data
     const filteredAttractions = await filterAttractions(
       continent,
-      country_name,
-      city_name,
+      country,
+      city,
       no_rooms_min,
       no_rooms_max,
       rating_min,
@@ -116,8 +118,8 @@ router.get('/filter', async (req, res) => {
 
 async function filterAttractions(
   continent,
-  country_name,
-  city_name,
+  country,
+  city,
   no_rooms_min,
   no_rooms_max,
   rating_min,
@@ -135,12 +137,12 @@ async function filterAttractions(
       filter.continent = continent;
     }
 
-    if (country_name) {
-      filter.country = country_name; // corrected spelling
+    if (country) {
+      filter.country = country; // corrected spelling
     }
 
-    if (city_name) {
-      filter.city = city_name; // corrected spelling
+    if (city) {
+      filter.city = city; // corrected spelling
     }
 
     if (no_rooms_min && no_rooms_max) {
@@ -178,7 +180,7 @@ async function filterAttractions(
     }
 
     // Find attractions matching the filter criteria
-    const filteredAttractions = await Attraction.find(filter);
+    const filteredAttractions = await Attractions.find(filter);
 
     return filteredAttractions;
   } catch (error) {
@@ -188,15 +190,15 @@ async function filterAttractions(
 }
 
 router.post("/delete", verifyToken, async (req, res) => {
-  try{
-    const {name, city} = req.body;
-    const user = await Users.findOne({"email": req.user.email});
-    const attraction = await Attractions.findOne({"name": name, "city": city});
-    if (attraction.owner.email != user.email) 
-      return res.status(401).json({msg:"Unauthorized Access"});
-    await Attractions.deleteOne({"name": name, "city": city});
+  try {
+    const { name, city } = req.body;
+    const user = await Users.findOne({ "email": req.user.email });
+    const attraction = await Attractions.findOne({ "name": name, "city": city });
+    if (attraction.owner.email != user.email)
+      return res.status(401).json({ msg: "Unauthorized Access" });
+    await Attractions.deleteOne({ "name": name, "city": city });
   }
-  catch (error){
+  catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
