@@ -7,17 +7,11 @@ const FlightSchema = new mongoose.Schema({
     arrival_airport: String,
     Departure_time: Date,
     Arrival_time: Date,
-    seats_total: Number, 
+    seats_total: Number,
     seats_booked: Number,
     ticket_price: Number,
-    owner: {
-        email: String,
-        password: String,
-        role: String,
-        firstname: String,
-        lastname: String,
-    },
-    bookings: [{passport_id: String}]
+    owner: String,
+    bookings: [{ passport_id: String }]
 });
 
 

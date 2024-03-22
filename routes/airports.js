@@ -1,5 +1,5 @@
 const express = require('express');
-const Airports = require('../model/Airport'); 
+const Airports = require('../model/Airport');
 const Users = require('../model/User');
 
 const jwt = require('jsonwebtoken');
@@ -29,14 +29,16 @@ router.post('/create', verifyToken, async (req, res) => {
   try {
     const { id, country, city } = req.body;
     const user = await Users.findOne({ email: req.user.email });
-   
+
     if (user.role != "owner")
       return res.status(401).json({ message: 'Unauthorized Action' });
-   
-      const newAirport = new Airports({ id, country, city, user });
+
+    const owner = user.email;
+
+    const newAirport = new Airports({ id, country, city, owner });
     const savedAirport = await newAirport.save();
     res.json(savedAirport);
-    
+
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: 'Internal Server Error' });
@@ -44,26 +46,27 @@ router.post('/create', verifyToken, async (req, res) => {
 });
 
 router.get('/getByID', async (req, res) => {
-  try{
-    const {id} = req.body
-    const airport = Airports.findOne({"id": id});
+  try {
+    const { id } = req.body
+    const airport = Airports.findOne({ "id": id });
     res.json(airport);
   }
-  catch (error){
+  catch (error) {
     console.log(error);
-    res.status(500).json({ error: 'Internal Server Error' });}
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 });
 
 router.post("/deleteByID", verifyToken, async (req, res) => {
-  try{
-    const {id} = req.body;
-    const user = await Users.findOne({"email": req.user.email});
-    const airport = await Airports.findOne({"id": id});
-    if (airport.owner.email != user.email) 
-      return res.status(401).json({msg:"Unauthorized Access"});
-    await Airports.deleteOne({"id":id});
+  try {
+    const { id } = req.body;
+    const user = await Users.findOne({ "email": req.user.email });
+    const airport = await Airports.findOne({ "id": id });
+    if (airport.owner.email != user.email)
+      return res.status(401).json({ msg: "Unauthorized Access" });
+    await Airports.deleteOne({ "id": id });
   }
-  catch (error){
+  catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
   }

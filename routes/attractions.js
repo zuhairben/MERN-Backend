@@ -49,7 +49,9 @@ router.post('/create', verifyToken, async (req, res) => {
     if (user.role != "owner")
       return res.status(401).json({ message: 'Unauthorized Action' });
 
-    const newAttraction = new Attractions({ name, city, state, type, country, description, phone, address, website, position, featres, timeOpen, priceRange, rating, numberOfReviews, user });
+    const owner = user.email;
+
+    const newAttraction = new Attractions({ name, city, state, type, country, description, phone, address, website, position, featres, timeOpen, priceRange, rating, numberOfReviews, owner });
     const savedAttraction = await newAttraction.save();
     res.json(savedAttraction);
 
@@ -80,8 +82,8 @@ router.get('/filter', async (req, res) => {
     // Get query parameters
     const {
       continent,
-      country_name,
-      city_name,
+      country,
+      city,
       no_rooms_min,
       no_rooms_max,
       rating_min,
@@ -95,8 +97,8 @@ router.get('/filter', async (req, res) => {
     // Apply filtering logic to your attraction data
     const filteredAttractions = await filterAttractions(
       continent,
-      country_name,
-      city_name,
+      country,
+      city,
       no_rooms_min,
       no_rooms_max,
       rating_min,
@@ -116,8 +118,8 @@ router.get('/filter', async (req, res) => {
 
 async function filterAttractions(
   continent,
-  country_name,
-  city_name,
+  country,
+  city,
   no_rooms_min,
   no_rooms_max,
   rating_min,
@@ -135,12 +137,12 @@ async function filterAttractions(
       filter.continent = continent;
     }
 
-    if (country_name) {
-      filter.country = country_name; // corrected spelling
+    if (country) {
+      filter.country = country; // corrected spelling
     }
 
-    if (city_name) {
-      filter.city = city_name; // corrected spelling
+    if (city) {
+      filter.city = city; // corrected spelling
     }
 
     if (no_rooms_min && no_rooms_max) {

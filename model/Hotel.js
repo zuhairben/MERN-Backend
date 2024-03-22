@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const HotelSchema = new mongoose.Schema({
     hotel_name: String,
-    continent : String,
+    continent: String,
     contry_name: String,
     city_name: String,
     no_rooms: Number,
@@ -11,13 +11,7 @@ const HotelSchema = new mongoose.Schema({
     review_count: Number,
     facilities: String,
     days_available: [Date],
-    owner: {
-        email: String,
-        password: String,
-        role: String,
-        firstname: String,
-        lastname: String,
-    }
+    owner: "String",
 
 });
 

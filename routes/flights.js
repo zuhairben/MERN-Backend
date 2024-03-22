@@ -37,6 +37,9 @@ router.post('/create', verifyToken, async (req, res) => {
     } = req.body;
     const user = await Users.findOne({ email: req.user.email });
 
+    console.log(user.role);
+    console.log(user.email);
+
     if (user.role != "owner")
       return res.status(401).json({ message: 'Unauthorized Action' });
 
@@ -48,7 +51,9 @@ router.post('/create', verifyToken, async (req, res) => {
     const formatted_arrival_time = new Date("<" + arrival_time + ">");
     const seats_booked = 0;
 
-    const newFlight = new Flights({ flight_id, plane_id, departure_airport, arrival_airport, formatted_departure_time, formatted_arrival_time, seats_total, seats_booked, ticket_price, user });
+    const owner = user.email;
+
+    const newFlight = new Flights({ flight_id, plane_id, departure_airport, arrival_airport, formatted_departure_time, formatted_arrival_time, seats_total, seats_booked, ticket_price, owner });
     const savedFlight = await newFlight.save();
     res.json(savedFlight);
 
@@ -98,6 +103,7 @@ router.post('/booking', verifyToken, async (req, res) => {
       return res.status(404).json({ message: 'Flight Full' });
     const new_booked = flight.seats_booked + 1
     await Flights.findOneAndUpdate({ "flight_id": flight_id }, { $set: { "seats_booked": new_booked }, $push: { "bookings": { "passport_id": passport_id } } })
+    res.status(200).json({ "msg": "Booking Successful" })
   }
 
   catch (error) {
@@ -107,14 +113,17 @@ router.post('/booking', verifyToken, async (req, res) => {
 });
 
 
-router.post("/deleteByID", verifyToken, async (req, res) => {
+router.post("/delete/id", verifyToken, async (req, res) => {
   try {
     const { flight_id } = req.body;
-    const user = await Users.findOne({ "email": req.user.email });
+
+
     const flight = await Flights.findOne({ "flight_id": flight_id });
-    if (flight.owner.email != user.email)
-      return res.status(401).json({ msg: "Unauthorized Access" });
+
+    if (flight.owner != req.user.email) return res.status(401).json({ "error": "Unauthorized Action" });
+
     await Flights.deleteOne({ "flight_id": flight_id });
+
   }
   catch (error) {
     console.error(error);
