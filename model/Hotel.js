@@ -10,8 +10,8 @@ const HotelSchema = new mongoose.Schema({
     price: Number,
     review_count: Number,
     facilities: String,
-    days_available: String,
-    owner: "String",
+    days_available: [Date],
+    owner: String
 
 });
 

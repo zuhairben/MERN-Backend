@@ -5,6 +5,8 @@ const hotelRouter = require('./routes/hotels');
 const airportRouter = require('./routes/airports');
 const attractionRouter = require('./routes/attractions');
 const flightRouter = require('./routes/flights');
+const userRouter = require('./routes/users');
+
 require("dotenv").config();
 
 const app = express();
@@ -31,7 +33,7 @@ app.use('/hotels', hotelRouter);
 app.use('/airports', airportRouter);
 app.use('/attractions', attractionRouter);
 app.use('/flights', flightRouter);
-
+app.use('/users', userRouter);
 
 app.use((err, req, res, next) => {
     console.error(err.stack);

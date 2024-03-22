@@ -13,9 +13,6 @@ router.post('/signup', async (req, res) => {
     try {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // copied from stack overflow
         const { email, password, firstname, lastname, role } = req.body;
-
-
-
         let user = await Users.findOne({ email });
         if (user) return res.json({ msg: 'User exists' });
         if (email.length < 3) return res.json({ msg: 'Email too small' });
