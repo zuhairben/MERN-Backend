@@ -7,7 +7,13 @@ const UserSchema = new mongoose.Schema({
     firstname: String,
     lastname: String,
     status: String,
-    is_deleted: Boolean
+    is_deleted: Boolean,
+    is_active: Boolean,
+    deleted_by: String,
+    deletion_time: String,
+    creation_time: String,
+    updated_by: String,
+    updation_time: String,
 });
 
 const Users = mongoose.model('Users', UserSchema);

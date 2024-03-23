@@ -17,7 +17,13 @@ const AttractionSchema = new mongoose.Schema({
     rating: Number,
     numberOfReviews: Number,
     owner: String,
-    is_deleted: Boolean
+    is_deleted: Boolean,
+    is_active: Boolean,
+    deleted_by: String,
+    deletion_time: String,
+    creation_time: String,
+    updated_by: String,
+    updation_time: String,
 
 });
 
