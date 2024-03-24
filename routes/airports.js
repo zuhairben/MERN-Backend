@@ -36,13 +36,8 @@ router.post('/create', verifyToken, async (req, res) => {
     const owner = user.email;
     let creation_time =new Date();
     creation_time = creation_time.toISOString().slice(0, 19).replace('T', ' '); 
-    const is_deleted = false;
     const is_active = true;
-    const deleted_by = null;
-    const deletion_time = null;
-    const updated_by = null;
-    const updation_time = null;
-    const newAirport = new Airports({ id, country, city, owner, is_deleted, is_active, deleted_by, deletion_time, creation_time, updated_by, updation_time});
+    const newAirport = new Airports({ id, country, city, owner, is_active, creation_time});
     const savedAirport = await newAirport.save();
     res.json(savedAirport);
 
