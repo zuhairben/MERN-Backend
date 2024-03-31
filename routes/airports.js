@@ -34,8 +34,10 @@ router.post('/create', verifyToken, async (req, res) => {
       return res.status(401).json({ message: 'Unauthorized Action' });
 
     const owner = user.email;
-
-    const newAirport = new Airports({ id, country, city, owner });
+    let creation_time =new Date();
+    creation_time = creation_time.toISOString().slice(0, 19).replace('T', ' '); 
+    const is_active = true;
+    const newAirport = new Airports({ id, country, city, owner, is_active, creation_time});
     const savedAirport = await newAirport.save();
     res.json(savedAirport);
 
@@ -66,7 +68,9 @@ router.post("/delete/id", verifyToken, async (req, res) => {
     console.log(req.user.email);
     if (!(airport.owner === req.user.email))
       return res.status(401).json({ msg: "Unauthorized Access" });
-    await Airports.deleteOne({ "id": id });
+    let deletion_time =new Date();
+    deletion_time = deletion_time.toISOString().slice(0, 19).replace('T', ' ');    
+    await Airports.updateOne({ "id": id },{"is_deleted": true, "deleted_by": airport.owner, "deletion_time": deletion_time});
     return res.status(200).json({"msg": "Deleted"})
   }
   catch (error) {

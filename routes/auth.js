@@ -18,9 +18,12 @@ router.post('/signup', async (req, res) => {
         if (email.length < 3) return res.json({ msg: 'Email too small' });
         if (!emailRegex.test(email)) return res.json({ msg: 'Invalid email format' });
         if (password.length < 8) return res.json({ msg: 'Password too small' });
-        if (role != "owner" && role != "user") return res.json({ msg: "Invalid user role" });
-
-        await Users.create({ email, password: await bcrypt.hash(password, 5), role, firstname, lastname, });
+        if (!(role === "owner") && !(role === "user")) return res.json({ msg: "Invalid user role" });
+        let creation_time =new Date();
+        creation_time = creation_time.toISOString().slice(0, 19).replace('T', ' '); 
+        const is_active = true;
+    
+        await Users.create({email, password: await bcrypt.hash(password, 5), role, firstname, lastname, is_active, creation_time});
 
         return res.json({ msg: 'User Created' });
     } catch (error) {

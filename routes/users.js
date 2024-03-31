@@ -31,8 +31,21 @@ router.post('/ch_pwd', verifyToken, async (req, res) => {
         if (!user) return res.json({ msg: "User doesn't exist" });
         const passwordCheck = await bcrypt.compare(password, user.password);
         if (!passwordCheck) return res.json({ msg: "Invalid password" });
-        await Users.updateOne({ email: req.user.email }, { password: await bcrypt.hash(newpassword, 5) });
+        await Users.updateOne({ email: req.user.email }, { password: await bcrypt.hash(newpassword, 5), updated_by: req.user.email, updation_time: new Date().toISOString().slice(0, 19).replace('T', ' ')});
         return res.json({ msg: 'Password Changed' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+router.post('/del_acc', verifyToken, async (req, res) => {
+    try {
+        const { email } = req.body;
+        const user = await Users.findOne({ email: req.user.email });
+        if (!user) return res.json({ msg: "User doesn't exist" });
+        await Users.updateOne({ email: req.user.email }, { is_deleted: true, deleted_by: req.user.email, deletion_time: new Date().toISOString().slice(0, 19).replace('T', ' ')});
+        return res.json({ msg: 'User Deleted' });
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Internal Server Error' });
