@@ -30,18 +30,18 @@ router.post('/create', verifyToken, async (req, res) => {
     const { hotel_name, continent, country_name, city_name, no_rooms, rating, price, review_count, facilities, days_available } = req.body;
     const user = await Users.findOne({ email: req.user.email });
 
-    const hotel = await Hotels.findOne({"hotel_name": hotel_name, "city_name": city_name});
-    if(hotel) return res.json({"msg": "Hotel already exists"});
+    const hotel = await Hotels.findOne({ "hotel_name": hotel_name, "city_name": city_name });
+    if (hotel) return res.json({ "msg": "Hotel already exists" });
 
-    if (user.role != "owner")
+    if (user.role != "owner" && user.is_active == true)
       return res.status(401).json({ message: 'Unauthorized Action' });
 
     const owner = req.user.email;
-    let creation_time =new Date();
-    creation_time = creation_time.toISOString().slice(0, 19).replace('T', ' '); 
+    let creation_time = new Date();
+    creation_time = creation_time.toISOString().slice(0, 19).replace('T', ' ');
     const is_active = true;
 
-    const newHotel = new Hotels({ hotel_name, continent, country_name, city_name, no_rooms, rating, price, review_count, facilities, days_available, owner, creation_time, is_active});
+    const newHotel = new Hotels({ hotel_name, continent, country_name, city_name, no_rooms, rating, price, review_count, facilities, days_available, owner, creation_time, is_active });
     const savedHotel = await newHotel.save();
     res.json(savedHotel);
 
@@ -199,7 +199,7 @@ router.post("/delete/namecity", verifyToken, async (req, res) => {
     const hotel = await Hotel.findOne({ "hotel_name": hotel_name, "city_name": city_name });
     if (hotel.owner.email != user.email)
       return res.status(401).json({ msg: "Unauthorized Access" });
-    await Hotel.updateOne({ "hotel_name": hotel_name, "city_name": city_name }, { "is_deleted": true, "deleted_by": hotel.owner, "deletion_time": new Date().toISOString().slice(0, 19).replace('T', ' ')});
+    await Hotel.updateOne({ "hotel_name": hotel_name, "city_name": city_name }, { "is_deleted": true, "deleted_by": hotel.owner, "deletion_time": new Date().toISOString().slice(0, 19).replace('T', ' ') });
   }
   catch (error) {
     console.error(error);
