@@ -59,6 +59,18 @@ router.get('/get/id', async (req, res) => {
   }
 });
 
+router.get('get/all', async (req, res) => {
+  try {
+    const airports = await Airports.find();
+    res.json(airports)
+  }
+
+  catch (error) {
+    console.log(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+})
+
 router.post("/delete/id", verifyToken, async (req, res) => {
   try {
     const { id } = req.body;
@@ -74,6 +86,39 @@ router.post("/delete/id", verifyToken, async (req, res) => {
     return res.status(200).json({ "msg": "Deleted" })
   }
   catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+
+
+router.post("/update/id", verifyToken, async (req, res) => {
+  try {
+    const { id, country, city } = req.body;
+    const user = await Users.findOne({ "email": req.user.email });
+    const airport = await Airports.findOne({ "id": id });
+    if (!(airport.owner === req.user.email)) {
+      return res.status(401).json({ msg: "Unauthorized Access" });
+    }
+
+    if (city !== undefined) {
+      airport.city = city;
+    }
+
+    if (counter !== undefined) {
+      airport.country = country;
+    }
+
+
+    airport.updated_by = req.user.name;
+    airport.updated_time = new Date();
+
+    await airport.save();
+
+
+    res.status(200).json({ msg: "Airport Updated" });
+  } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
