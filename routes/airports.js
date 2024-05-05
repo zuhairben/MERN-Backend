@@ -47,7 +47,7 @@ router.post('/create', verifyToken, async (req, res) => {
   }
 });
 
-router.get('/get/id', async (req, res) => {
+router.post('/get/id', async (req, res) => {
   try {
     const { id } = req.body
     const airport = await Airports.findOne({ "id": id });
@@ -59,7 +59,7 @@ router.get('/get/id', async (req, res) => {
   }
 });
 
-router.get('get/all', async (req, res) => {
+router.post('/get/all', async (req, res) => {
   try {
     const airports = await Airports.find();
     res.json(airports)
@@ -106,7 +106,7 @@ router.post("/update/id", verifyToken, async (req, res) => {
       airport.city = city;
     }
 
-    if (counter !== undefined) {
+    if (country !== undefined) {
       airport.country = country;
     }
 
