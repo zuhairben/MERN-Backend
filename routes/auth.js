@@ -21,11 +21,9 @@ router.post('/signup', async (req, res) => {
         if (!(role === "owner") && !(role === "user")) return res.json({ msg: "Invalid user role" });
         let creation_time = new Date();
         creation_time = creation_time.toISOString().slice(0, 19).replace('T', ' ');
+        const is_active = true;
         if (role === "owner" || role === "admin") {
             const is_active = false;
-        }
-        else {
-            const is_active = true;
         }
 
 
@@ -150,6 +148,8 @@ router.post('/facebook-login', async (req, res) => {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
+
+
 
 
 module.exports = router;

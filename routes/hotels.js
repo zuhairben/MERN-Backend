@@ -41,7 +41,7 @@ router.post('/create', verifyToken, async (req, res) => {
     creation_time = creation_time.toISOString().slice(0, 19).replace('T', ' ');
     const is_active = true;
 
-    const newHotel = new Hotels({ hotel_name, continent, country_name, city_name, no_rooms, rating, price, review_count, facilities, days_available, owner, creation_time, is_active });
+    const newHotel = new Hotels({ hotel_name, continent, country_name, city_name, no_rooms, rating, price, review_count, facilities, days_available, owner, creation_time });
     const savedHotel = await newHotel.save();
     res.json(savedHotel);
 
@@ -51,9 +51,9 @@ router.post('/create', verifyToken, async (req, res) => {
   }
 });
 
-router.get('/get/toprated', async (req, res) => {
+router.post('/toprated', async (req, res) => {
   try {
-    const topRatedHotels = await Hotels.find().sort({ rating: -1 }).limit(50);
+    const topRatedHotels = await Hotels.find({ "is_deleted": false }).sort({ rating: -1 }).limit(50);
 
     if (!topRatedHotels || topRatedHotels.length === 0) {
       return res.status(404).json({ message: 'No top-rated hotels found' });
@@ -69,7 +69,7 @@ router.get('/get/toprated', async (req, res) => {
 
 //Get Hotels by filters
 
-router.get('/filter', async (req, res) => {
+router.post('/filter', async (req, res) => {
   try {
     // Get query parameters
     const {
@@ -192,14 +192,28 @@ async function filterHotels(
   }
 }
 
-router.post("/delete/namecity", verifyToken, async (req, res) => {
+router.post("/delete", verifyToken, async (req, res) => {
   try {
     const { hotel_name, city_name } = req.body;
     const user = await Users.findOne({ "email": req.user.email });
-    const hotel = await Hotel.findOne({ "hotel_name": hotel_name, "city_name": city_name });
-    if (hotel.owner.email != user.email)
+    const hotel = await Hotels.findOne({ "hotel_name": hotel_name, "city_name": city_name });
+    console.log("user: " + user.email + "\n" + "owner: " + hotel.owner);
+    if (hotel.owner != user.email)
       return res.status(401).json({ msg: "Unauthorized Access" });
-    await Hotel.updateOne({ "hotel_name": hotel_name, "city_name": city_name }, { "is_deleted": true, "deleted_by": hotel.owner, "deletion_time": new Date().toISOString().slice(0, 19).replace('T', ' ') });
+
+    let deletion_time = new Date();
+    deletion_time = deletion_time.toISOString().slice(0, 19).replace('T', ' ');
+
+    const updateResult = await Hotels.updateOne({ "hotel_name": hotel_name, "city_name": city_name }, { "is_deleted": true, "deleted_by": hotel.owner, "deletion_time": deletion_time });
+
+    if (updateResult.modifiedCount === 1) {
+      // Update successful, send response
+      res.status(200).json({ msg: "Hotel deleted successfully" });
+    } else {
+      // Update failed, send error
+      res.status(400).json({ msg: "Failed to delete hotel" });
+    }
+
   }
   catch (error) {
     console.error(error);

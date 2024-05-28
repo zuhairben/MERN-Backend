@@ -59,7 +59,6 @@ router.post('/del_acc', verifyToken, async (req, res) => {
 
 router.post('/users/inactive', verifyToken, async (req, res) => {
   try {
-
     const user = await Users.findOne({ email: req.user.email });
     if (user.role === "admin" && user.is_active == true) {
       const inactive_users = Users.find({ is_active: "false" });
@@ -94,6 +93,7 @@ router.post('/users/activate', verifyToken, async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
 
 
 module.exports = router;
