@@ -54,9 +54,9 @@ router.post('/create', verifyToken, async (req, res) => {
     const owner = user.email;
     let creation_time = new Date();
     creation_time = creation_time.toISOString().slice(0, 19).replace('T', ' ');
-    const is_active = true;
 
-    const newFlight = new Flights({ flight_id, plane_id, departure_airport, arrival_airport, formatted_departure_time, formatted_arrival_time, seats_total, seats_booked, ticket_price, owner, creation_time, is_active });
+
+    const newFlight = new Flights({ flight_id, plane_id, departure_airport, arrival_airport, formatted_departure_time, formatted_arrival_time, seats_total, seats_booked, ticket_price, owner, creation_time });
     const savedFlight = await newFlight.save();
     res.json(savedFlight);
 
@@ -125,7 +125,10 @@ router.post("/delete/id", verifyToken, async (req, res) => {
 
     if (!(flight.owner === req.user.email)) return res.status(401).json({ "error": "Unauthorized Action" });
 
-    await Flights.updateOne({ "flight_id": flight_id }, { "is_deleted": true, "deleted_by": flight.owner, "deletion_time": new Date().toISOString().slice(0, 19).replace('T', ' ') });
+    let deletion_time = new Date();
+    deletion_time = deletion_time.toISOString().slice(0, 19).replace('T', ' ');
+
+    await Flights.updateOne({ "flight_id": flight_id }, { "is_deleted": true, "deleted_by": flight.owner, "deletion_time": deletion_time });
     return res.status(200).json({ "msg": "Deleted" })
   }
   catch (error) {
@@ -133,6 +136,41 @@ router.post("/delete/id", verifyToken, async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
+router.post("/update/id", verifyToken, async (req, res) => {
+  try {
+    const { flight_id,
+      departure_airport,
+      arrival_airport,
+      seats_total,
+      ticket_price } = req.body;
+
+
+    const flight = await Flights.findOne({ "flight_id": flight_id });
+
+    if (!(flight.owner === req.user.email)) return res.status(401).json({ "error": "Unauthorized Action" });
+
+    let updation_time = new Date();
+    updation_time = updation_time.toISOString().slice(0, 19).replace('T', ' ');
+
+    const owner = req.user.email;
+
+    await Flights.updateOne({ "flight_id": flight_id }, {
+      "departure_airport": departure_airport,
+      "arrival_airport": arrival_airport,
+      "seats_total": seats_total,
+      "ticket_price": ticket_price,
+      "updation_time": updation_time,
+      "updated_by": owner
+    });
+    return res.status(200).json({ "msg": "Deleted" })
+  }
+  catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
 
 
 module.exports = router;

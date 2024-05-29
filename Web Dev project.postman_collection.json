@@ -66,6 +66,34 @@
 					"response": []
 				},
 				{
+					"name": "New Admin",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"pqr@xyz.com\",\n    \"password\": \"12345678\",\n    \"firstname\": \"John\",\n    \"lastname\": \"Doe\",\n    \"role\": \"owner\" \n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/auth/signup",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"auth",
+								"signup"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Login User",
 					"request": {
 						"method": "POST",
@@ -120,6 +148,34 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Login Admin",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"admin@admin.com\",\n    \"password\": \"12345678\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/auth/login",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -129,7 +185,7 @@
 				{
 					"name": "Filter Hotels",
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
 						"url": {
 							"raw": "localhost:3000/hotels/filter?continent_name=Asia",
@@ -172,6 +228,34 @@
 					"response": []
 				},
 				{
+					"name": "Delete Hotel",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"hotel_name\": \"continental\",\r\n    \"city_name\": \"hyderabad\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/hotels/delete",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"hotels",
+								"delete"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Create Hotel",
 					"request": {
 						"auth": {
@@ -179,7 +263,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InBxckB4eXouY29tIiwicm9sZSI6Im93bmVyIiwiZmlyc3RuYW1lIjoiSm9obiIsImxhc3RuYW1lIjoiRG9lIiwiaWF0IjoxNzExMDUzNDc5LCJleHAiOjE3MTExMzk4Nzl9.Pq0VUxyzir5EJRVsPaISBwSR6_zWpRPA8ZaMAHSAbOs",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InBxckB4eXouY29tIiwicm9sZSI6Im93bmVyIiwiZmlyc3RuYW1lIjoiSm9obiIsImxhc3RuYW1lIjoiRG9lIiwiaWF0IjoxNzE2ODgyMzUzLCJleHAiOjE3MTY5Njg3NTN9.d2qGOFqQdVr69pGiSQDpOGJzpKUsMXdRJURWDVYfvbk",
 									"type": "string"
 								}
 							]
@@ -212,17 +296,26 @@
 				{
 					"name": "get Top rated",
 					"request": {
-						"method": "GET",
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InBxckB4eXouY29tIiwicm9sZSI6Im93bmVyIiwiZmlyc3RuYW1lIjoiSm9obiIsImxhc3RuYW1lIjoiRG9lIiwiaWF0IjoxNzE2ODgyMzUzLCJleHAiOjE3MTY5Njg3NTN9.d2qGOFqQdVr69pGiSQDpOGJzpKUsMXdRJURWDVYfvbk",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
 						"header": [],
 						"url": {
-							"raw": "localhost:3000/hotels/get/toprated",
+							"raw": "localhost:3000/hotels/toprated",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"hotels",
-								"get",
 								"toprated"
 							]
 						}
@@ -506,7 +599,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InBxckB4eXouY29tIiwicm9sZSI6Im93bmVyIiwiZmlyc3RuYW1lIjoiSm9obiIsImxhc3RuYW1lIjoiRG9lIiwiaWF0IjoxNzE0ODUwNjU5LCJleHAiOjE3MTQ5MzcwNTl9.nd_yCBZU0tlI86GcBxqueCsgF3wBJWBHxUy6VAI8lq4",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InBxckB4eXouY29tIiwicm9sZSI6Im93bmVyIiwiZmlyc3RuYW1lIjoiSm9obiIsImxhc3RuYW1lIjoiRG9lIiwiaWF0IjoxNzE2NzAxMDM4LCJleHAiOjE3MTY3ODc0Mzh9.fvK9vU6IqvFpPPaicIkUy99D8D0Qq6aUd4uzZqgQ2iY",
 									"type": "string"
 								}
 							]
@@ -687,6 +780,87 @@
 								"airports",
 								"update",
 								"id"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Activate",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGFkbWluLmNvbSIsInJvbGUiOiJhZG1pbiIsImZpcnN0bmFtZSI6IkpvaG4iLCJsYXN0bmFtZSI6IkRvZSIsImlhdCI6MTcxNjk1MzkyMCwiZXhwIjoxNzE3MDQwMzIwfQ.pXrXm5HnEpE4-p2DI-KjJ4ulrNh5sF9EwttfVxtSZaA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"admin@admin.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/users/activate",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"users",
+								"activate"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Profile",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InBxckB4eXouY29tIiwicm9sZSI6Im93bmVyIiwiZmlyc3RuYW1lIjoiSm9obiIsImxhc3RuYW1lIjoiRG9lIiwiaWF0IjoxNzE2OTU0NzU5LCJleHAiOjE3MTcwNDExNTl9.OH8ydOKLkX7beO9AquOzY0x3sQjPW-J6SxSoktPAPwc",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/users/profile",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"users",
+								"profile"
 							]
 						}
 					},
