@@ -2,6 +2,9 @@ const express = require('express');
 const Users = require('../model/User');
 
 const jwt = require('jsonwebtoken');
+const Hotels = require('../model/Hotel');
+const Attraction = require('../model/Attraction');
+const Airports = require('../model/Airport');
 const router = express.Router();
 
 function verifyToken(req, res, next) {
@@ -57,7 +60,7 @@ router.post('/del_acc', verifyToken, async (req, res) => {
   }
 });
 
-router.post('/users/inactive', verifyToken, async (req, res) => {
+router.post('/inactive', verifyToken, async (req, res) => {
   try {
     const user = await Users.findOne({ email: req.user.email });
     if (user.role === "admin" && user.is_active == true) {
@@ -75,12 +78,12 @@ router.post('/users/inactive', verifyToken, async (req, res) => {
   }
 });
 
-router.post('/users/activate', verifyToken, async (req, res) => {
+router.post('/activate', verifyToken, async (req, res) => {
   try {
     const { email } = req.body
     const user = await Users.findOne({ email: req.user.email });
     if (user.role === "admin" && user.is_active == true) {
-      const inactive_users = Users.UpdateOne({ email: email }, { is_active: "true" });
+      const inactive_users = Users.updateOne({ email: email }, { is_active: "true" });
       return res.status(200).json({ "msg": "User activated" })
     }
     else {
@@ -94,6 +97,24 @@ router.post('/users/activate', verifyToken, async (req, res) => {
   }
 });
 
+router.post('/profile', verifyToken, async (req, res) => {
+  try {
+    const email = req.user.email;
+
+    let user = await Users.findOne({ email: email });
+
+    const hotels = await Hotels.find({ owner: email })
+    const attractions = await Attraction.find({ owner: email })
+    const airports = await Airports.find({ owner: email })
+
+    return res.status(200).json({ "user": user, "hotels": hotels, "attractions": attractions, "airports": airports });
+  }
+
+  catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+})
 
 
 module.exports = router;
