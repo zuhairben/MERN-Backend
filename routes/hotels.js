@@ -72,6 +72,7 @@ router.post('/filter', async (req, res) => {
   try {
     // Get query parameters
     const {
+      hotel_name,
       continent,
       country_name,
       city_name,
@@ -87,6 +88,7 @@ router.post('/filter', async (req, res) => {
 
     // Apply filtering logic to your hotel data (using your preferred model or database)
     const filteredHotels = await filterHotels(
+      hotel_name,
       continent,
       country_name,
       city_name,
@@ -111,6 +113,7 @@ router.post('/filter', async (req, res) => {
 
 
 async function filterHotels(
+  hotel_name,
   continent,
   country_name,
   city_name,
@@ -127,6 +130,10 @@ async function filterHotels(
 
     // Build filter query object based on provided parameters
     const filter = {};
+
+    if (hotel_name) {
+      filter.hotel_name = hotel_name;
+    }
 
     if (continent) {
       filter.continent = continent;
