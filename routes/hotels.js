@@ -66,7 +66,6 @@ router.post('/toprated', async (req, res) => {
   }
 });
 
-
 //Get Hotels by filters
 router.post('/filter', async (req, res) => {
   try {

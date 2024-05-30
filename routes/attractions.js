@@ -83,9 +83,11 @@ router.get('/filter', async (req, res) => {
   try {
     // Get query parameters
     const {
+      name,
       continent,
       country,
       city,
+      type,
       no_rooms_min,
       no_rooms_max,
       rating_min,
@@ -98,9 +100,11 @@ router.get('/filter', async (req, res) => {
 
     // Apply filtering logic to your attraction data
     const filteredAttractions = await filterAttractions(
+      name,
       continent,
       country,
       city,
+      type,
       no_rooms_min,
       no_rooms_max,
       rating_min,
@@ -119,9 +123,11 @@ router.get('/filter', async (req, res) => {
 });
 
 async function filterAttractions(
+  name,
   continent,
   country,
   city,
+  type,
   no_rooms_min,
   no_rooms_max,
   rating_min,
@@ -135,6 +141,10 @@ async function filterAttractions(
     // Build filter query object based on provided parameters
     const filter = {};
 
+    if (name) {
+      filter.name = name;
+    }
+
     if (continent) {
       filter.continent = continent;
     }
@@ -145,6 +155,10 @@ async function filterAttractions(
 
     if (city) {
       filter.city = city; // corrected spelling
+    }
+
+    if (type) {
+      filter.type = type;
     }
 
     if (no_rooms_min && no_rooms_max) {
