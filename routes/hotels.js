@@ -281,5 +281,22 @@ router.post("/update", verifyToken, async (req, res) => {
   }
 });
 
+router.post("/get", async (req, res) => {
+  try {
+    const { _id } = req.body;
+
+    const hotel = await Hotels.findOne({ "_id": _id }).populate("reviews");
+    if (!hotel) return res.status(404).json({ message: "Hotel not Found" })
+
+    return res.status(200).json(hotel)
+  }
+
+  catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+
+})
+
 
 module.exports = router;

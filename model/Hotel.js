@@ -12,7 +12,7 @@ const HotelSchema = new mongoose.Schema({
     facilities: String,
     days_available: String,
     owner: String,
-    reviews: [{ type: mongoose.SchemaTypes.ObjectId, ref: 'Review' }],
+    reviews: [{ type: mongoose.SchemaTypes.ObjectId, ref: 'Reviews' }],
     is_deleted: Boolean,
     deleted_by: String,
     deletion_time: String,

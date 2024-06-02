@@ -65,7 +65,7 @@ router.post('/create', verifyToken, async (req, res) => {
   }
 });
 
-router.get('/top-rated', async (req, res) => {
+router.post('/top-rated', async (req, res) => {
   try {
     const topRatedAttractions = await Attractions.find().sort({ rating: -1 }).limit(50);
 
@@ -81,7 +81,7 @@ router.get('/top-rated', async (req, res) => {
 });
 
 
-router.get('/filter', async (req, res) => {
+router.post('/filter', async (req, res) => {
   try {
     // Get query parameters
     const {
@@ -270,6 +270,26 @@ router.post("/update", verifyToken, async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
+
+
+router.post("/get", async (req, res) => {
+  try {
+    const { _id } = req.body;
+
+    const attraction = await Attractions.findOne({ _id: _id }).populate("reviews");
+    if (!attraction) return res.status(404).json({ message: "Attraction not Found" })
+
+
+    return res.status(200).json(attraction)
+  }
+
+  catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+
+})
 
 
 
