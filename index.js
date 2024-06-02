@@ -6,7 +6,7 @@ const airportRouter = require('./routes/airports');
 const attractionRouter = require('./routes/attractions');
 const flightRouter = require('./routes/flights');
 const userRouter = require('./routes/users');
-const reviewRouter = require('./routes/reviews/review')
+const reviewRouter = require('./routes/review')
 
 require("dotenv").config();
 

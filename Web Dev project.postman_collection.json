@@ -874,11 +874,21 @@
 				{
 					"name": "Post review",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImRlZkB4eXouY29tIiwicm9sZSI6InVzZXIiLCJmaXJzdG5hbWUiOiJKb2huIiwibGFzdG5hbWUiOiJEb2UiLCJpYXQiOjE3MTczMDkzMzcsImV4cCI6MTcxNzM5NTczN30.vd28EUtRLHLzBy3Z7-Sn6pPP5C1hlLyyhqGdwnDDpEM",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"_id\": \"66558bf8e56cbf1edf20c233\",\r\n    \"rating\": 4,\r\n    \"description\": \"good place\",\r\n    \"type\": \"Hotel\"\r\n}",
+							"raw": "{\r\n    \"_id\": \"665bf7f8a3ccfb2aaf512c72\",\r\n    \"rating\": 4,\r\n    \"description\": \"good place\",\r\n    \"type\": \"Hotel\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -894,6 +904,72 @@
 							"path": [
 								"reviews",
 								"post"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Review",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImRlZkB4eXouY29tIiwicm9sZSI6InVzZXIiLCJmaXJzdG5hbWUiOiJKb2huIiwibGFzdG5hbWUiOiJEb2UiLCJpYXQiOjE3MTczMDkzMzcsImV4cCI6MTcxNzM5NTczN30.vd28EUtRLHLzBy3Z7-Sn6pPP5C1hlLyyhqGdwnDDpEM",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"_id\": \"665c0fd6a292b472c3f2049b\",\r\n    \"rating\": 1,\r\n    \"description\": \"good place\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/reviews/update",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"reviews",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Review",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"_id\": \"665c0fd6a292b472c3f2049b\"\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/reviews/delete",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"reviews",
+								"delete"
 							]
 						}
 					},
