@@ -321,6 +321,34 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "get ID",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"_id\": \"665bf7f8a3ccfb2aaf512c72\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/hotels/get",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"hotels",
+								"get"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -367,11 +395,8 @@
 				},
 				{
 					"name": "Filter Attraction",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
@@ -397,6 +422,62 @@
 									"key": "country",
 									"value": "India"
 								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Top-rated",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/attractions/top-rated",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"attractions",
+								"top-rated"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get ID",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"_id\": \"665c194c695e97a4b360998d\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/attractions/get",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"attractions",
+								"get"
 							]
 						}
 					},
@@ -888,7 +969,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"_id\": \"665bf7f8a3ccfb2aaf512c72\",\r\n    \"rating\": 4,\r\n    \"description\": \"good place\",\r\n    \"type\": \"Hotel\"\r\n}",
+							"raw": "{\r\n    \"_id\": \"665c194c695e97a4b360998d\",\r\n    \"rating\": 4,\r\n    \"description\": \"good place\",\r\n    \"type\": \"Attraction\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
