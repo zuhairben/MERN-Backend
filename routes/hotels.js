@@ -27,7 +27,7 @@ router.use(express.json());
 
 router.post('/create', verifyToken, async (req, res) => {
   try {
-    const { hotel_name, continent, country_name, city_name, no_rooms, rating, price, review_count, facilities, days_available } = req.body;
+    const { hotel_name, continent, country_name, city_name, no_rooms, price, facilities, days_available } = req.body;
     const user = await Users.findOne({ email: req.user.email });
 
     const hotel = await Hotels.findOne({ "hotel_name": hotel_name, "city_name": city_name });
@@ -41,7 +41,12 @@ router.post('/create', verifyToken, async (req, res) => {
     creation_time = creation_time.toISOString().slice(0, 19).replace('T', ' ');
     const is_active = true;
 
-    const newHotel = new Hotels({ hotel_name, continent, country_name, city_name, no_rooms, rating, price, review_count, facilities, days_available, owner, creation_time });
+    rating = 0;
+    numberOfReviews = 0;
+
+    is_deleted = false;
+
+    const newHotel = new Hotels({ hotel_name, continent, country_name, city_name, no_rooms, rating, price, numberOfReviews, facilities, days_available, owner, is_deleted, creation_time });
     const savedHotel = await newHotel.save();
     res.json(savedHotel);
 

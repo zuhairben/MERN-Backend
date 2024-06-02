@@ -867,6 +867,39 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "Reviews",
+			"item": [
+				{
+					"name": "Post review",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"_id\": \"66558bf8e56cbf1edf20c233\",\r\n    \"rating\": 4,\r\n    \"description\": \"good place\",\r\n    \"type\": \"Hotel\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/reviews/post",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"reviews",
+								"post"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	]
 }

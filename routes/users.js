@@ -101,7 +101,7 @@ router.post('/profile', verifyToken, async (req, res) => {
   try {
     const email = req.user.email;
 
-    let user = await Users.findOne({ email: email });
+    let user = await Users.findOne({ email: email }).populate("reviews");
 
     const hotels = await Hotels.find({ owner: email })
     const attractions = await Attraction.find({ owner: email })
@@ -110,11 +110,14 @@ router.post('/profile', verifyToken, async (req, res) => {
     return res.status(200).json({ "user": user, "hotels": hotels, "attractions": attractions, "airports": airports });
   }
 
+
+
   catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 })
+
 
 
 module.exports = router;

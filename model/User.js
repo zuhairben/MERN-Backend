@@ -7,6 +7,7 @@ const UserSchema = new mongoose.Schema({
     firstname: String,
     lastname: String,
     status: String,
+    reviews: [{ type: mongoose.SchemaTypes.ObjectId, ref: 'Reviews' }],
     is_deleted: Boolean,
     is_active: Boolean,
     deleted_by: String,

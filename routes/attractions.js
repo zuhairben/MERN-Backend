@@ -41,19 +41,21 @@ router.post('/create', verifyToken, async (req, res) => {
       features,
       timeOpen,
       priceRange,
-      rating,
-      numberOfReviews
     } = req.body;
     const user = await Users.findOne({ email: req.user.email });
     console.log(user.role);
     if (user.role != "owner" && user.is_active == true)
       return res.status(401).json({ message: 'Unauthorized Action' });
 
+    rating = 0;
+    numberOfReviews = 0;
+
     const owner = user.email;
     let creation_time = new Date();
     creation_time = creation_time.toISOString().slice(0, 19).replace('T', ' ');
     const is_active = true;
-    const newAttraction = new Attractions({ name, city, state, type, country, description, phone, address, website, position, features, timeOpen, priceRange, rating, numberOfReviews, owner, creation_time, is_active });
+    const is_deleted = false;
+    const newAttraction = new Attractions({ name, city, state, type, country, description, phone, address, website, position, features, timeOpen, priceRange, rating, numberOfReviews, owner, creation_time, is_deleted, is_active });
     const savedAttraction = await newAttraction.save();
     res.json(savedAttraction);
 
