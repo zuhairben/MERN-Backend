@@ -118,6 +118,25 @@ router.post('/profile', verifyToken, async (req, res) => {
   }
 })
 
+router.post('/prof', verifyToken, async (req, res) => {
+  try {
+    const email = req.user.email;
+    const user = await Users.findOne({ email });
+
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    return res.status(200).json({
+      firstname: user.firstname,
+      lastname: user.lastname,
+      email: user.email,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+
 router.post("/get", async (req, res) => {
   try {
     const { _id } = req.body;
