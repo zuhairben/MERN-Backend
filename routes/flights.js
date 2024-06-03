@@ -47,8 +47,6 @@ router.post('/create', verifyToken, async (req, res) => {
 
     const flight = await Flights.findOne({ "flight_id": flight_id });
     if (flight) return res.json({ "msg": "Flight already exists" });
-    const formatted_departure_time = new Date("<" + departure_time + ">");
-    const formatted_arrival_time = new Date("<" + arrival_time + ">");
     const seats_booked = 0;
 
     const owner = user.email;
@@ -56,7 +54,7 @@ router.post('/create', verifyToken, async (req, res) => {
     creation_time = creation_time.toISOString().slice(0, 19).replace('T', ' ');
 
 
-    const newFlight = new Flights({ flight_id, plane_id, departure_airport, arrival_airport, formatted_departure_time, formatted_arrival_time, seats_total, seats_booked, ticket_price, owner, creation_time });
+    const newFlight = new Flights({ flight_id, plane_id, departure_airport, arrival_airport, departure_time, arrival_time, seats_total, seats_booked, ticket_price, owner, creation_time });
     const savedFlight = await newFlight.save();
     res.json(savedFlight);
 
