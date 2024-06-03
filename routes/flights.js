@@ -66,7 +66,7 @@ router.post('/create', verifyToken, async (req, res) => {
   }
 });
 
-router.get('/search/route', async (req, res) => {
+router.post('/search/route', async (req, res) => {
   try {
     const { departure_airport, arrival_airport } = req.body;
     const EnrouteFlights = await Flights.find({ "departure_airport": departure_airport, "arrival_airport": arrival_airport }).sort({ departure_time: 1 });
