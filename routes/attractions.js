@@ -41,19 +41,21 @@ router.post('/create', verifyToken, async (req, res) => {
       features,
       timeOpen,
       priceRange,
-      rating,
-      numberOfReviews
     } = req.body;
     const user = await Users.findOne({ email: req.user.email });
     console.log(user.role);
     if (user.role != "owner" && user.is_active == true)
       return res.status(401).json({ message: 'Unauthorized Action' });
 
+    rating = 0;
+    numberOfReviews = 0;
+
     const owner = user.email;
     let creation_time = new Date();
     creation_time = creation_time.toISOString().slice(0, 19).replace('T', ' ');
     const is_active = true;
-    const newAttraction = new Attractions({ name, city, state, type, country, description, phone, address, website, position, features, timeOpen, priceRange, rating, numberOfReviews, owner, creation_time, is_active });
+    const is_deleted = false;
+    const newAttraction = new Attractions({ name, city, state, type, country, description, phone, address, website, position, features, timeOpen, priceRange, rating, numberOfReviews, owner, creation_time, is_deleted, is_active });
     const savedAttraction = await newAttraction.save();
     res.json(savedAttraction);
 
@@ -63,7 +65,7 @@ router.post('/create', verifyToken, async (req, res) => {
   }
 });
 
-router.get('/top-rated', async (req, res) => {
+router.post('/top-rated', async (req, res) => {
   try {
     const topRatedAttractions = await Attractions.find().sort({ rating: -1 }).limit(50);
 
@@ -79,13 +81,15 @@ router.get('/top-rated', async (req, res) => {
 });
 
 
-router.get('/filter', async (req, res) => {
+router.post('/filter', async (req, res) => {
   try {
     // Get query parameters
     const {
+      name,
       continent,
       country,
       city,
+      type,
       no_rooms_min,
       no_rooms_max,
       rating_min,
@@ -98,9 +102,11 @@ router.get('/filter', async (req, res) => {
 
     // Apply filtering logic to your attraction data
     const filteredAttractions = await filterAttractions(
+      name,
       continent,
       country,
       city,
+      type,
       no_rooms_min,
       no_rooms_max,
       rating_min,
@@ -119,9 +125,11 @@ router.get('/filter', async (req, res) => {
 });
 
 async function filterAttractions(
+  name,
   continent,
   country,
   city,
+  type,
   no_rooms_min,
   no_rooms_max,
   rating_min,
@@ -135,6 +143,10 @@ async function filterAttractions(
     // Build filter query object based on provided parameters
     const filter = {};
 
+    if (name) {
+      filter.name = name;
+    }
+
     if (continent) {
       filter.continent = continent;
     }
@@ -145,6 +157,10 @@ async function filterAttractions(
 
     if (city) {
       filter.city = city; // corrected spelling
+    }
+
+    if (type) {
+      filter.type = type;
     }
 
     if (no_rooms_min && no_rooms_max) {
@@ -254,6 +270,26 @@ router.post("/update", verifyToken, async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
+
+
+router.post("/get", async (req, res) => {
+  try {
+    const { _id } = req.body;
+
+    const attraction = await Attractions.findOne({ _id: _id }).populate("reviews");
+    if (!attraction) return res.status(404).json({ message: "Attraction not Found" })
+
+
+    return res.status(200).json(attraction)
+  }
+
+  catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+
+})
 
 
 

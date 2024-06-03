@@ -17,6 +17,7 @@ const AttractionSchema = new mongoose.Schema({
     rating: Number,
     numberOfReviews: Number,
     owner: String,
+    reviews: [{ type: mongoose.SchemaTypes.ObjectId, ref: 'Reviews' }],
     is_deleted: Boolean,
     is_active: Boolean,
     deleted_by: String,

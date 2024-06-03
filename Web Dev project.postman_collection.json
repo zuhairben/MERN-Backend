@@ -321,6 +321,34 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "get ID",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"_id\": \"665bf7f8a3ccfb2aaf512c72\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/hotels/get",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"hotels",
+								"get"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -367,11 +395,8 @@
 				},
 				{
 					"name": "Filter Attraction",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
@@ -397,6 +422,62 @@
 									"key": "country",
 									"value": "India"
 								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Top-rated",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/attractions/top-rated",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"attractions",
+								"top-rated"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get ID",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"_id\": \"665c194c695e97a4b360998d\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/attractions/get",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"attractions",
+								"get"
 							]
 						}
 					},
@@ -861,6 +942,115 @@
 							"path": [
 								"users",
 								"profile"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Reviews",
+			"item": [
+				{
+					"name": "Post review",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImRlZkB4eXouY29tIiwicm9sZSI6InVzZXIiLCJmaXJzdG5hbWUiOiJKb2huIiwibGFzdG5hbWUiOiJEb2UiLCJpYXQiOjE3MTczMDkzMzcsImV4cCI6MTcxNzM5NTczN30.vd28EUtRLHLzBy3Z7-Sn6pPP5C1hlLyyhqGdwnDDpEM",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"_id\": \"665c194c695e97a4b360998d\",\r\n    \"rating\": 4,\r\n    \"description\": \"good place\",\r\n    \"type\": \"Attraction\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/reviews/post",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"reviews",
+								"post"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Review",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImRlZkB4eXouY29tIiwicm9sZSI6InVzZXIiLCJmaXJzdG5hbWUiOiJKb2huIiwibGFzdG5hbWUiOiJEb2UiLCJpYXQiOjE3MTczMDkzMzcsImV4cCI6MTcxNzM5NTczN30.vd28EUtRLHLzBy3Z7-Sn6pPP5C1hlLyyhqGdwnDDpEM",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"_id\": \"665c0fd6a292b472c3f2049b\",\r\n    \"rating\": 1,\r\n    \"description\": \"good place\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/reviews/update",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"reviews",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Review",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"_id\": \"665c0fd6a292b472c3f2049b\"\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/reviews/delete",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"reviews",
+								"delete"
 							]
 						}
 					},
