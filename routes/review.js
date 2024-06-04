@@ -107,7 +107,7 @@ router.post('/post', verifyToken, async (req, res) => {  // Added semicolon here
         console.log("old rating = " + place.rating)
         console.log("new rating value = " + rating)
 
-        if (isNaN(place.rating)) {
+        if (isNaN(place.rating) || isNaN(place.numberOfReviews)) {
             place.rating = rating;
             place.numberOfReviews = 1;
         }
