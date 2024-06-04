@@ -80,21 +80,34 @@ router.post('/inactive', verifyToken, async (req, res) => {
 
 router.post('/all', verifyToken, async (req, res) => {
   try {
-    const user = await Users.find({ email: req.user.email });
-    if (user.role === "admin" && user.is_active == true) {
-      const users = Users.find();
-      res.json(users)
-    }
-    else {
-      res.status(401).json({ error: 'Unauthorized get request' })
-    }
-  }
+    const user = await Users.findOne({ email: req.user.email });
+    console.log(user.role);
 
-  catch (error) {
+    if (user.role === "admin" && user.is_active === true) {
+      const users = await Users.find();
+
+      // Option 1: Omit sensitive data
+      const usersData = users.map(user => ({
+          firstname: user.firstname,
+          lastname: user.lastname,
+          email: user.email,
+          role: user.role,
+          is_active: user.is_active,
+      }));
+      res.json(usersData);
+
+      // Option 2: Use a JSON library (example with json-circular-stringify)
+      // const jsonCircularStringify = require('json-circular-stringify');
+      // res.json(jsonCircularStringify(users));
+    } else {
+      res.status(401).json({ error: 'Unauthorized get request' });
+    }
+  } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
 
 router.post('/activate', verifyToken, async (req, res) => {
   try {
