@@ -78,6 +78,24 @@ router.post('/inactive', verifyToken, async (req, res) => {
   }
 });
 
+router.post('/all', verifyToken, async (req, res) => {
+  try {
+    const user = await Users.find({ email: req.user.email });
+    if (user.role === "admin" && user.is_active == true) {
+      const users = Users.find();
+      res.json(users)
+    }
+    else {
+      res.status(401).json({ error: 'Unauthorized get request' })
+    }
+  }
+
+  catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
 router.post('/activate', verifyToken, async (req, res) => {
   try {
     const { email } = req.body

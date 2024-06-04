@@ -284,10 +284,8 @@ router.post("/update", verifyToken, async (req, res) => {
 router.post("/get", async (req, res) => {
   try {
     const { _id } = req.body;
-    console.log("reac")
-    const hotel = await Hotels.findOne({ "_id": _id }).populate({path: "reviews", populate: {path: "reviews.owner"}});
+    const hotel = await Hotels.findOne({ "_id": _id }).populate({path: "reviews", populate: {path: "owner"}});
     if (!hotel) return res.status(404).json({ message: "Hotel not Found" });
-    console.log(hotel.reviews[0].owner.email)
 
     return res.status(200).json(hotel)
   }
