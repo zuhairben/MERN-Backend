@@ -60,13 +60,14 @@ function verifyToken(req, res, next) {
 
 router.post('/post', verifyToken, async (req, res) => {  // Added semicolon here
     try {
-        const { _id, rating, description, type } = req.body;
+        const { _id, rating, description } = req.body;
+        console.log("token = " + req.headers.authorization)
 
         if (rating > 5 || rating < 0) return res.status(422).json({ message: "Invalid rating" })
 
         const user = await Users.findOne({ email: req.user.email }).populate("reviews");
 
-        let place;
+        
 
         if (await CheckReviewExists(user.email, _id)) {
             return res.status(409).json({ msg: "Review Already Exists" })
@@ -74,6 +75,15 @@ router.post('/post', verifyToken, async (req, res) => {  // Added semicolon here
         // Add new review entry
         let creation_time = new Date();
         creation_time = creation_time.toISOString().slice(0, 19).replace('T', ' ');
+
+        type = "Hotel"
+        place = await Hotels.findOne({ "_id": _id });
+        if (!place) {
+            type = "Attraction"
+            place = await Attractions.findOne({ "_id": _id });
+        }
+
+        if (!place) return res.status(404).body({message: "Place not found"})
 
 
         const review = new Reviews({
@@ -88,12 +98,11 @@ router.post('/post', verifyToken, async (req, res) => {  // Added semicolon here
 
         await review.save();
 
-
+        
 
         // Update review values inside the Hotel/Attraction
-        if (type === "Hotel")
-            place = await Hotels.findOne({ "_id": _id });
-        else place = await Attractions.findOne({ "_id": _id });
+        
+
 
         console.log("old rating = " + place.rating)
         console.log("new rating value = " + rating)
