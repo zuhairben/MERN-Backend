@@ -83,8 +83,8 @@ router.post('/all', verifyToken, async (req, res) => {
     const user = await Users.findOne({ email: req.user.email });
     console.log(user.role);
 
-    if (user.role === "admin" && user.is_active === true) {
-      const users = await Users.find();
+    if (user.role === "admin") {
+      const users = await Users.find( {role: { $ne: 'admin' }});
 
       // Option 1: Omit sensitive data
       const usersData = users.map(user => ({
@@ -96,9 +96,6 @@ router.post('/all', verifyToken, async (req, res) => {
       }));
       res.json(usersData);
 
-      // Option 2: Use a JSON library (example with json-circular-stringify)
-      // const jsonCircularStringify = require('json-circular-stringify');
-      // res.json(jsonCircularStringify(users));
     } else {
       res.status(401).json({ error: 'Unauthorized get request' });
     }
@@ -113,8 +110,27 @@ router.post('/activate', verifyToken, async (req, res) => {
   try {
     const { email } = req.body
     const user = await Users.findOne({ email: req.user.email });
-    if (user.role === "admin" && user.is_active == true) {
-      const inactive_users = Users.updateOne({ email: email }, { is_active: "true" });
+    if (user.role === "admin" ) {
+      const inactive_users = await Users.updateOne({ email: email }, { is_active: "true" });
+      return res.status(200).json({ "msg": "User activated" })
+    }
+    else {
+      res.status(401).json({ error: 'Unauthorized get request' })
+    }
+  }
+
+  catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+router.post('/deactivate', verifyToken, async (req, res) => {
+  try {
+    const { email } = req.body
+    const user = await Users.findOne({ email: req.user.email });
+    if (user.role === "admin") {
+      const inactive_users = await Users.updateOne({ email: email }, { is_active: "false" });
       return res.status(200).json({ "msg": "User activated" })
     }
     else {
