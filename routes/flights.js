@@ -49,6 +49,8 @@ router.post('/create', verifyToken, async (req, res) => {
     if (flight) return res.json({ "msg": "Flight already exists" });
     const seats_booked = 0;
 
+    
+
     const owner = user.email;
     let creation_time = new Date();
     creation_time = creation_time.toISOString().slice(0, 19).replace('T', ' ');
