@@ -144,7 +144,7 @@ async function filterHotels(
     }
 
     if (country_name) {
-      filter.contry_name = country_name;
+      filter.country_name = country_name;
     }
 
     if (city_name) {
@@ -184,7 +184,7 @@ async function filterHotels(
     }
 
     if (days_available) {
-      const availableDates = days_available.split(',').map(date => new Date(date));
+      const availableDates = days_available;
       filter.days_available = { $in: availableDates };
     }
 
