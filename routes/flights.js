@@ -91,8 +91,8 @@ router.get('/search/id', async (req, res) => {
 router.post('/booking', verifyToken, async (req, res) => { //This needs to add Updation time and stuff
   try {
 
-    const { flight_id, passport_id } = req.body;
-    const flight = await Flights.findOne({ "flight_id": flight_id });
+    const { _id, passport_id } = req.body;
+    const flight = await Flights.findOne({ "_id": _id });
 
     email = req.user.email
 
@@ -105,7 +105,7 @@ router.post('/booking', verifyToken, async (req, res) => { //This needs to add U
     if (flight.seats_booked === flight.seats_total)
       return res.status(404).json({ message: 'Flight Full' });
     const new_booked = flight.seats_booked + 1
-    await Flights.findOneAndUpdate({ "flight_id": flight_id }, { $set: { "seats_booked": new_booked }, $push: { "bookings": { "passport_id": passport_id, "user_email": email } } })
+    await Flights.findOneAndUpdate({ "_id": flight_id }, { $set: { "seats_booked": new_booked }, $push: { "bookings": { "passport_id": passport_id, "user_email": email } } })
     res.status(200).json({ "msg": "Booking Successful" })
   }
 
