@@ -104,8 +104,10 @@ router.get('/search/id', async (req, res) => {
 router.post('/booking', verifyToken, async (req, res) => { //This needs to add Updation time and stuff
   try {
 
-    const { flight_id, passport_id, email } = req.body;
-    const flight = await Flights.findOne({ "flight_id": flight_id });
+    const { _id, passport_id } = req.body;
+    const flight = await Flights.findOne({ "_id": _id });
+
+    email = req.user.email
 
     if (!flight)
       return res.status(404).json({ message: 'Flight not found' });
@@ -116,7 +118,7 @@ router.post('/booking', verifyToken, async (req, res) => { //This needs to add U
     if (flight.seats_booked === flight.seats_total)
       return res.status(404).json({ message: 'Flight Full' });
     const new_booked = flight.seats_booked + 1
-    await Flights.findOneAndUpdate({ "flight_id": flight_id }, { $set: { "seats_booked": new_booked }, $push: { "bookings": { "passport_id": passport_id, "user_email": email } } })
+    await Flights.findOneAndUpdate({ "_id": flight_id }, { $set: { "seats_booked": new_booked }, $push: { "bookings": { "passport_id": passport_id, "user_email": email } } })
     res.status(200).json({ "msg": "Booking Successful" })
   }
 
@@ -125,6 +127,21 @@ router.post('/booking', verifyToken, async (req, res) => { //This needs to add U
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
+
+router.post('/bookings', verifyToken, async (req, res) => {
+ try  {
+    const email = req.user.email
+    const bookings = await Flights.find({"bookings.user_email" : email })
+
+    return res.status(200).json(bookings)
+   }
+
+   catch (error) {
+    console.log(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+})
 
 
 router.post("/delete/id", verifyToken, async (req, res) => {
