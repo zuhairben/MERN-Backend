@@ -57,7 +57,7 @@ router.post('/create', verifyToken, async (req, res) => {
     const newFlight = new Flights({ flight_id, plane_id, departure_airport, arrival_airport, departure_time, arrival_time, seats_total, seats_booked, ticket_price, owner, creation_time });
     const savedFlight = await newFlight.save();
     res.json(savedFlight);
-
+ 
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: 'Internal Server Error' });
@@ -67,9 +67,19 @@ router.post('/create', verifyToken, async (req, res) => {
 router.post('/search/route', async (req, res) => {
   try {
     const { departure_airport, arrival_airport } = req.body;
-    if(departure_airport === arrival_airport) return res.status(404).json({ error: 'Departure and Arrival airports cannot be same' });
-    if (!departure_airport || !arrival_airport) return res.status(404).json({ error: 'Departure and Arrival airports cannot be empty' });
-    const EnrouteFlights = await Flights.find({ "departure_airport": departure_airport, "arrival_airport": arrival_airport }).sort({ departure_time: 1 });
+
+
+
+    // Construct the query object dynamically
+    let query = {};
+    if (departure_airport) {
+      query.departure_airport = departure_airport;
+    }
+    if (arrival_airport) {
+      query.arrival_airport = arrival_airport;
+    }
+
+    const EnrouteFlights = await Flights.find(query).sort({ departure_time: 1 });
 
     res.json(EnrouteFlights);
   } catch (error) {
@@ -77,6 +87,7 @@ router.post('/search/route', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
 
 router.get('/search/id', async (req, res) => {
   try {
