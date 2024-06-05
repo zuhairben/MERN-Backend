@@ -91,8 +91,10 @@ router.get('/search/id', async (req, res) => {
 router.post('/booking', verifyToken, async (req, res) => { //This needs to add Updation time and stuff
   try {
 
-    const { flight_id, passport_id, email } = req.body;
+    const { flight_id, passport_id } = req.body;
     const flight = await Flights.findOne({ "flight_id": flight_id });
+
+    email = req.user.email
 
     if (!flight)
       return res.status(404).json({ message: 'Flight not found' });
@@ -112,6 +114,21 @@ router.post('/booking', verifyToken, async (req, res) => { //This needs to add U
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
+
+router.post('/bookings', verifyToken, async (req, res) => {
+ try  {
+    const email = req.user.email
+    const bookings = await Flights.find({"bookings.user_email" : email })
+
+    return res.status(200).json(bookings)
+   }
+
+   catch (error) {
+    console.log(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+})
 
 
 router.post("/delete/id", verifyToken, async (req, res) => {
