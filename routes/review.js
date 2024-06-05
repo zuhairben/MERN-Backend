@@ -12,9 +12,9 @@ const router = express.Router();
 
 router.use(express.json());
 
-async function CheckReviewExists(email, _id) {
+async function CheckReviewExists(email, id) {
 
-    console.log("email: " + email + "\n" + "id: " + _id);
+    console.log("email: " + email + "\n" + "id: " + id);
 
     const review_exists = await Users.aggregate([
         {
@@ -25,16 +25,18 @@ async function CheckReviewExists(email, _id) {
                 from: "Reviews",
                 localField: "reviews",
                 foreignField: "_id",
-                as: "reviews",
+                as: "reviewsApp",
             },
         },
-        {
-            $match: { "reviews._id": _id },
-        },
+        // {
+        //     $match: { "reviews.place": id },
+        // },
     ]);
 
-    return review_exists.length != 0;
+    console.log("review exists: " + review_exists[0].)
+    console.log("^^^^^")
 
+    return review_exists[0].reviews.length != 0
 
 }
 
@@ -61,9 +63,9 @@ function verifyToken(req, res, next) {
 router.post('/post', verifyToken, async (req, res) => {  // Added semicolon here
     try {
         const { _id, rating, description } = req.body;
-        console.log("token = " + req.headers.authorization)
+        // console.log("token = " + req.headers.authorization)
 
-        if (rating > 5 || rating < 0) return res.status(422).json({ message: "Invalid rating" })
+        if (rating > 5 || rating < 0) return res.status(422).json({ message: "Rating should be between 0 and 5" })
 
         const user = await Users.findOne({ email: req.user.email }).populate("reviews");
 
@@ -104,8 +106,8 @@ router.post('/post', verifyToken, async (req, res) => {  // Added semicolon here
         
 
 
-        console.log("old rating = " + place.rating)
-        console.log("new rating value = " + rating)
+        // console.log("old rating = " + place.rating)
+        // console.log("new rating value = " + rating)
 
         if (isNaN(place.rating) || isNaN(place.numberOfReviews)) {
             place.rating = rating;
@@ -148,7 +150,7 @@ router.post("/update", verifyToken, async (req, res) => {
         // Update rating
         let place
 
-        console.log("type: " + review.type);
+        // console.log("type: " + review.type);
 
         if (review.type === "Hotel")
             place = await Hotels.findOne({ "_id": review.place })
@@ -156,7 +158,7 @@ router.post("/update", verifyToken, async (req, res) => {
             place = await Attractions.findOne({ "_id": review.place })
 
 
-        console.log("place: " + place + "\n" + "place id: " + review.place);
+        // console.log("place: " + place + "\n" + "place id: " + review.place);
         if (!place) return res.status(404).json({ message: "Place not found" })
 
 
@@ -211,7 +213,7 @@ router.post("/delete", verifyToken, async (req, res) => {
             place = await Attractions.findOne({ "_id": review.place })
 
 
-        console.log("place: " + place);
+        // console.log("place: " + place);
 
         if (!place) return response.status(404).json({ message: "Place not found" })
 
