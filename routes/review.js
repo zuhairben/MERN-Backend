@@ -33,7 +33,7 @@ async function CheckReviewExists(email, id) {
         // },
     ]);
 
-    console.log("review exists: " + review_exists[0].)
+    console.log("review exists: " + review_exists[0])
     console.log("^^^^^")
 
     return review_exists[0].reviews.length != 0
