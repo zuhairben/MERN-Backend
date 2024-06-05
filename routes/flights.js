@@ -67,6 +67,8 @@ router.post('/create', verifyToken, async (req, res) => {
 router.post('/search/route', async (req, res) => {
   try {
     const { departure_airport, arrival_airport } = req.body;
+    if(departure_airport === arrival_airport) return res.status(404).json({ error: 'Departure and Arrival airports cannot be same' });
+    if (!departure_airport || !arrival_airport) return res.status(404).json({ error: 'Departure and Arrival airports cannot be empty' });
     const EnrouteFlights = await Flights.find({ "departure_airport": departure_airport, "arrival_airport": arrival_airport }).sort({ departure_time: 1 });
 
     res.json(EnrouteFlights);
