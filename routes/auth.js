@@ -21,11 +21,13 @@ router.post('/signup', async (req, res) => {
         if (!(role === "owner") && !(role === "user") && !(role === "admin")) return res.json({ msg: "Invalid user role" });
         let creation_time = new Date();
         creation_time = creation_time.toISOString().slice(0, 19).replace('T', ' ');
-        const is_active = true;
+        let is_active = true;
+        console.log("role = " + role)
         if (role === "owner" || role === "admin") {
-            const is_active = false;
+            is_active = false;
+            console.log("TRUEEE!!!!")
         }
-
+        console.log("is_active: " + is_active)
 
         await Users.create({ email, password: await bcrypt.hash(password, 5), role, firstname, lastname, is_active, creation_time });
 
